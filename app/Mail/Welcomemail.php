@@ -40,6 +40,10 @@ class Welcomemail extends Mailable
     {
         return new Content(
             view: 'login',
+            with:[
+                'messageContent'=> $this->msg,
+                'subject'=> $this->subject,
+            ],
         );
     }
 
