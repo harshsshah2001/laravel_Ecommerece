@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class thumbbails extends Authenticatable
+class Mainpicture extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -18,9 +18,7 @@ class thumbbails extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'heading',
-        'sub_heading',
-        'image'
+        'heading','sub_heading','image',
     ];
 
     /**

@@ -15,8 +15,8 @@ class AdminController extends Controller
         return view('admin.admin_index');
     }
 
-    public function thumbbail_function(){
-        return view('admin.admin_thumbbail');
+    public function mainpage_function(){
+        return view('admin.admin_mainpicture');
     }
 
     public function show_all_data_function(){
@@ -83,23 +83,47 @@ class AdminController extends Controller
 
     // }
 
-    public function thumbbail_post_function(Request $request){
+    public function mainpage_post_function(Request $request){
         $validate = $request->validate([
-            'head'=>'required|string',
-            'tag'=>'required|string',
-            'image'=>'required|image',
+            'head' => 'required|string',
+            'tag' => 'required|string',
+            'image' => 'required|image',
         ]);
 
-        $imagePath = $request->file('image')->store('uploads','public');
+        $imagePath = $request->file('image')->store('uploads', 'public');
 
-        DB::insert('thumbbails')->insert([
-            'head'=>$validate['head'],
-            'tag'=>$validate['tag'],
-            'image'=>$imagePath,
+        DB::table('mainpictures')->insert([
+            'head' => $validate['head'],
+            'tag' => $validate['tag'],
+            'image' => $imagePath,
         ]);
-        toastr()->success('Your data has been successfully Added.');
 
-        return redirect()->route('admin_home');
+        toastr()->success('Your data has been successfully added.');
 
     }
+
+public function popular_products_get_function(){
+    return view('admin.admin_popular_products');
+}
+
+    public function popular_products_post_function(Request $request){
+
+      $validate =  $request->validate([
+    'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+    'image_name' => 'required|string',
+    'price' => 'required|numeric',
+]);
+
+$imagePath = $request->file('image')->store('uploads', 'public');
+
+DB::table('popular_products')->insert([
+    'image' => $imagePath,
+    'image_name' => $validate['image_name'],
+    'price' => $validate['price'],
+]);
+
+toastr()->success('Your data has been successfully added.');
+
+    }
+
 }

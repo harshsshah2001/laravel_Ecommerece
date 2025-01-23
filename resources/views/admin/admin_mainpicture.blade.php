@@ -80,22 +80,23 @@
 <body>
     <div class="form-container">
         <h2>Add Thumbail</h2>
-        <form action="{{route('thumbbail_post')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('mainpage_post') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="first-name">Head Line</label>
-                <input type="text" id="head" name="first-name">
+                <label for="head">Head Line</label>
+                <input type="text" id="head" name="head" required>
             </div>
             <div class="form-group">
-                <label for="last-name">Tag Line</label>
-                <input type="text" id="tag" name="Tag-name" placeholder="Enter your last name">
+                <label for="tag">Tag Line</label>
+                <input type="text" id="tag" name="tag" placeholder="Enter your tag line" required>
             </div>
             <div class="form-group">
                 <label for="profile-image">Profile Image</label>
-                <input type="file" id="profile-image" name="image">
+                <input type="file" id="profile-image" name="image" required>
             </div>
             <button type="submit" class="submit-btn">Submit</button>
         </form>
+
     </div>
 </body>
 </html>

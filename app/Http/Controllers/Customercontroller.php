@@ -124,7 +124,8 @@ class Customercontroller extends Controller
     }
 
     public function index_page(){
-        return view('index');
+        $data = DB::table('mainpictures')->get();
+        return view('index',['datas'=>$data]);
     }
 
     public function email_user_forgot_password(){

@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('thumbbails', function (Blueprint $table) {
+        Schema::create('popular_products', function (Blueprint $table) {
             $table->id();
-            $table->string('heading')->notnull();
-            $table->string('sub_heading')->notnull();
-            $table->string('image')->notnull();
+            $table->string('image');
+            $table->string('image_name');
+            $table->integer('price');
             $table->timestamps();
-
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('thumbbails');
+        Schema::dropIfExists('popular_products');
     }
 };
