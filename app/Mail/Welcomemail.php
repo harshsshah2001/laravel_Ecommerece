@@ -39,7 +39,7 @@ class Welcomemail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'login',
+            view: 'thank_you',
             with:[
                 'messageContent'=> $this->msg,
                 'subject'=> $this->subject,

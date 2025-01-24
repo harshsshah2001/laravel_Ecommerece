@@ -15,7 +15,10 @@ Route::get('/index',[Customercontroller::class,'index_page'])->name('index');
 
 // });
 
-Route::get('product-details', [Customercontroller::class, 'products_details'])->name('product-details');
+Route::get('product-details', [CustomerController::class, 'products_details'])->name('product-details');
+
+Route::get('product-cart_page/{id}', [CustomerController::class, 'products_cart_page_function'])->name('product-cart_page');
+
 
 Route::get('registerform', [Customercontroller::class, 'register'])->name('registerform');
 Route::post('registerforms', [Customercontroller::class, 'register_save_data'])->name('registerform_data');

@@ -180,7 +180,7 @@
 
     <main>
         <!--Banner Area Start -->
-        @foreach ($datas as $data)
+        @foreach ($all_data as $data_harsh)
             <section class="banner-area">
                 <div class="container">
                     <div class="row align-items-center">
@@ -193,11 +193,10 @@
                             </div>
                         </div>
 
-
                         <div class="col-lg-6 order-1 order-lg-2">
                             <div class="banner-area__img">
 
-                                <img src="{{ asset('storage/' . $data->image) }}" height="120px" width="300px"
+                                <img src="{{ asset('storage/' . $data_harsh->image) }}" height="120px" width="300px"
                                     alt="banner-img" class="img-fluid">
 
                             </div>
@@ -298,195 +297,50 @@
                     </div>
                     <div class="features-wrapper">
                         <div class="features-active">
-                            <div class="product-item">
-                                <div class="product-item-image">
-                                    <a href=""><img src="{{ asset('images/product/05.jpg') }}"
-                                            alt="Product Name" class="img-fluid"></a>
-                                    <div class="cart-icon">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
-                                                viewBox="0 0 16.75 16.75">
-                                                <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
-                                                    <g id="Icon" transform="translate(0 1)">
-                                                        <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(4.773 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <ellipse id="Ellipse_3" data-name="Ellipse 3" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(12.273 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <path id="Path_3" data-name="Path 3"
-                                                            d="M1,1H3.727l1.827,9.564a1.38,1.38,0,0,0,1.364,1.15h6.627a1.38,1.38,0,0,0,1.364-1.15L16,4.571H4.409"
-                                                            transform="translate(-1 -1)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
+
+                            @foreach ($data as $products_datas)
+                                <div class="product-item">
+                                    <div class="product-item-image">
+                                        <a href=""><img src="{{ asset('storage/' . $products_datas->image) }}"
+                                                alt="Product Name" class="img-fluid" height="200px" width="300px"></a>
+                                        <div class="cart-icon">
+                                            <a href="#"><i class="far fa-heart"></i></a>
+                                            <a href="{{ route('product-cart_page',$products_datas->id)}}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
+                                                    viewBox="0 0 16.75 16.75">
+                                                    <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
+                                                        <g id="Icon" transform="translate(0 1)">
+                                                            <ellipse id="Ellipse_2" data-name="Ellipse 2"
+                                                                cx="0.682" cy="0.714" rx="0.682"
+                                                                ry="0.714" transform="translate(4.773 13.571)"
+                                                                fill="none" stroke="#1a2224"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="1.5" />
+                                                            <ellipse id="Ellipse_3" data-name="Ellipse 3"
+                                                                cx="0.682" cy="0.714" rx="0.682"
+                                                                ry="0.714" transform="translate(12.273 13.571)"
+                                                                fill="none" stroke="#1a2224"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="1.5" />
+                                                            <path id="Path_3" data-name="Path 3"
+                                                                d="M1,1H3.727l1.827,9.564a1.38,1.38,0,0,0,1.364,1.15h6.627a1.38,1.38,0,0,0,1.364-1.15L16,4.571H4.409"
+                                                                transform="translate(-1 -1)" fill="none"
+                                                                stroke="#1a2224" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="1.5" />
+                                                        </g>
                                                     </g>
-                                                </g>
-                                            </svg>
-                                        </a>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-info">
+                                        <a href="{{ route('product-details') }}">BERRY TYPE-II: C1N Backpack</a>
+                                        <span>{{ $products_datas->image_name }}</span>
+                                        <span>{{ $products_datas->price }}<span>
                                     </div>
                                 </div>
-                                <div class="product-item-info">
-                                    <a href="{{ route('product-details') }}">BERRY TYPE-II: C1N Backpack</a>
-                                    <span>$975</span> <del>$999</del>
-                                </div>
-                            </div>
-                            <div class="product-item">
-                                <div class="product-item-image">
-                                    <a href="{{ route('product-details') }}"> <img
-                                            src="{{ asset('images/product/04.jpg') }}" alt="Product Name"
-                                            class="img-fluid"></a>
-                                    <div class="cart-icon">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
-                                                viewBox="0 0 16.75 16.75">
-                                                <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
-                                                    <g id="Icon" transform="translate(0 1)">
-                                                        <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(4.773 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <ellipse id="Ellipse_3" data-name="Ellipse 3" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(12.273 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <path id="Path_3" data-name="Path 3"
-                                                            d="M1,1H3.727l1.827,9.564a1.38,1.38,0,0,0,1.364,1.15h6.627a1.38,1.38,0,0,0,1.364-1.15L16,4.571H4.409"
-                                                            transform="translate(-1 -1)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-item-info">
-                                    <a href="{{ route('product-details') }}">BERRY TYPE-II: C1N Backpack</a>
-                                    <span>$975</span> <del>$999</del>
-                                </div>
-                            </div>
-                            <div class="product-item">
-                                <div class="product-item-image">
-                                    <a href="{{ route('product-details') }}"><img
-                                            src="{{ asset('images/product/01.jpg') }}" alt="Product Name"
-                                            class="img-fluid"></a>
-                                    <div class="cart-icon">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
-                                                viewBox="0 0 16.75 16.75">
-                                                <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
-                                                    <g id="Icon" transform="translate(0 1)">
-                                                        <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(4.773 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <ellipse id="Ellipse_3" data-name="Ellipse 3" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(12.273 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <path id="Path_3" data-name="Path 3"
-                                                            d="M1,1H3.727l1.827,9.564a1.38,1.38,0,0,0,1.364,1.15h6.627a1.38,1.38,0,0,0,1.364-1.15L16,4.571H4.409"
-                                                            transform="translate(-1 -1)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-item-info">
-                                    <a href="{{ route('product-details') }}">BERRY TYPE-II: C1N Backpack</a>
-                                    <span>$975</span> <del>$999</del>
-                                </div>
-                            </div>
-                            <div class="product-item">
-                                <div class="product-item-image">
-                                    <a href="{{ route('product-details') }}"> <img
-                                            src="{{ asset('images/product/02.jpg') }}" alt="Product Name"
-                                            class="img-fluid"></a>
-                                    <div class="cart-icon">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
-                                                viewBox="0 0 16.75 16.75">
-                                                <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
-                                                    <g id="Icon" transform="translate(0 1)">
-                                                        <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(4.773 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <ellipse id="Ellipse_3" data-name="Ellipse 3" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(12.273 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <path id="Path_3" data-name="Path 3"
-                                                            d="M1,1H3.727l1.827,9.564a1.38,1.38,0,0,0,1.364,1.15h6.627a1.38,1.38,0,0,0,1.364-1.15L16,4.571H4.409"
-                                                            transform="translate(-1 -1)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-item-info">
-                                    <a href="{{ route('product-details') }}">BERRY TYPE-II: C1N Backpack</a>
-                                    <span>$975</span> <del>$999</del>
-                                </div>
-                            </div>
-                            <div class="product-item">
-                                <div class="product-item-image">
-                                    <a href="{{ route('product-details') }}"><img
-                                            src="{{ asset('images/product/03.jpg') }}" alt="Product Name"
-                                            class="img-fluid"></a>
-                                    <div class="cart-icon">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
-                                                viewBox="0 0 16.75 16.75">
-                                                <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
-                                                    <g id="Icon" transform="translate(0 1)">
-                                                        <ellipse id="Ellipse_2" data-name="Ellipse 2" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(4.773 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <ellipse id="Ellipse_3" data-name="Ellipse 3" cx="0.682"
-                                                            cy="0.714" rx="0.682" ry="0.714"
-                                                            transform="translate(12.273 13.571)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                        <path id="Path_3" data-name="Path 3"
-                                                            d="M1,1H3.727l1.827,9.564a1.38,1.38,0,0,0,1.364,1.15h6.627a1.38,1.38,0,0,0,1.364-1.15L16,4.571H4.409"
-                                                            transform="translate(-1 -1)" fill="none"
-                                                            stroke="#1a2224" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="1.5" />
-                                                    </g>
-                                                </g>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="product-item-info">
-                                    <a href="{{ route('product-details') }}">BERRY TYPE-II: C1N Backpack</a>
-                                    <span>$975</span> <del>$999</del>
-                                </div>
-                            </div>
+                            @endforeach
+
                         </div>
                         <div class="slider-arrows">
                             <div class="prev-arrow">
@@ -578,8 +432,8 @@
                                             src="{{ asset('images/product/01.jpg') }}" alt="Product Name"
                                             class="img-fluid"></a>
                                     <div class="cart-icon">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
+                                        <a href=""><i class="far fa-heart"></i></a>
+                                        <a href="">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
                                                 viewBox="0 0 16.75 16.75">
                                                 <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
@@ -619,7 +473,7 @@
                                             class="img-fluid"></a>
                                     <div class="cart-icon">
                                         <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="#">
+                                        <a href="">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
                                                 viewBox="0 0 16.75 16.75">
                                                 <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">

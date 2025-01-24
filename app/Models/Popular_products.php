@@ -21,6 +21,12 @@ class Popular_products extends Authenticatable
         'image','image_name','price',
     ];
 
+    public function image()
+{
+    return $this->hasOne(Popular_products::class, 'image', 'id'); // Replace 'product_id' with the correct column name
+}
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

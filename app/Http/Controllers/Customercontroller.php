@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\Welcomemail;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Customer;
+use App\Models\Popular_products;
 
 
 
@@ -40,15 +41,12 @@ class Customercontroller extends Controller
         $email_user = DB::table('customers')->where('email', $email)->first();
 
         if ($email_user) {
-            // Use Toastr to show error message
             toastr()->error('Your Email is already registered.');
 
             return redirect()->back();
         } else {
-            // Handle the image upload
             $imagepath = $request->file('image')->store('uploads', 'public');
 
-            // Insert the user data into the database
             DB::table('customers')->insert([
                 'name' => $validate['name'],
                 'email' => $validate['email'],
@@ -58,13 +56,11 @@ class Customercontroller extends Controller
                 'phone' => $validate['phone'],
             ]);
 
-            // Send a welcome email
             $useremail = $validate['email'];
             $msg = "This Email Is Sent From Endel Digital Solution's";
             $subject = "Endel Mail";
             Mail::to($useremail)->send(new Welcomemail($msg, $subject));
 
-            // Use Toastr to show success message
             toastr()->success('Your data has been successfully registered.');
 
             return redirect()->route('loginform');
@@ -108,11 +104,11 @@ class Customercontroller extends Controller
 
     public function logout_user(Request $request)
     {
-        Auth::logout(); // Log out the user
-        $request->session()->invalidate(); // Invalidate the session
-        $request->session()->regenerateToken(); // Regenerate CSRF token
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect()->route('loginform'); // Redirect to the login page or another route
+        return redirect()->route('loginform');
     }
 
     public function shoping(){
@@ -120,12 +116,41 @@ class Customercontroller extends Controller
     }
 
     public function products_details(){
-        return view('product-details');
+                return view('product-details');
     }
+    // public function products_cart_page_function($id){
+
+    //     $all_product_data = DB::table('popular_products')->where('id', $id)->first();
+    //             return view('product-details',['all_products_datas'=>$all_product_data]);
+    // }
+
+    public function products_cart_page_function($id)
+{
+    // $product = Popular_products::with('image')->where('id', $id)->first();
+
+    $products_datas = Popular_products::where('id', $id)->first();
+
+    if (!$products_datas) {
+        return redirect()->back()->withErrors('Product not found.');
+    }
+
+    // return view('product-details',['products_datas'=>$products_datas]);
+
+    return view('product-details',compact('products_datas'));
+
+    // dd($products_datas->toArray()); // Debug to check if 'image' is being fetched
+}
+
+
+
 
     public function index_page(){
         $data = DB::table('mainpictures')->get();
-        return view('index',['datas'=>$data]);
+        $popular_products_data = DB::table('popular_products')->get();
+
+        // print_r(json_encode($popular_products_data));die();
+
+        return view('index',['all_data'=>$data],['products_data'=>$popular_products_data]);
     }
 
     public function email_user_forgot_password(){

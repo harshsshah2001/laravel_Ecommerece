@@ -351,6 +351,7 @@
         <!--Breadcrumb Area End -->
 
         <!-- Product Details Area Start -->
+        {{-- @foreach ($all_products_datas as $products_datas) --}}
         <section class="product">
             <div class="container">
                 <div class="row">
@@ -359,10 +360,21 @@
                             <div class="exzoom" id="exzoom">
                                 <div class="exzoom_img_box">
                                     <ul class='exzoom_img_ul'>
-                                        <li><img src="dist/images/product-deatils/1-big-mage.jpg" /></li>
-                                        <li><img src="dist/images/product-deatils/2-big-image.jpg" /></li>
+
+                                        @if ($products_datas->image != null && $products_datas->image != '')
+                                            <img src="{{ asset('storage/public/uploads/' . $products_datas->image) }}"
+                                                alt="{{ $products_datas['image_name'] }}">
+                                        @else
+                                            <p>No image available.</p>
+                                        @endif
+
+
+
+                                        <img src="{{ asset('storage/' . $products_datas->image) }}"
+                                            alt="{{ $products_datas->name }}">
+                                        {{-- <li><img src="dist/images/product-deatils/2-big-image.jpg" /></li>
                                         <li><img src="dist/images/product-deatils/3-big-image.jpg" /></li>
-                                        <li><img src="dist/images/product-deatils/4-big-image.jpg" /></li>
+                                        <li><img src="dist/images/product-deatils/4-big-image.jpg" /></li> --}}
                                     </ul>
                                 </div>
                                 <div class="exzoom_nav"></div>
@@ -374,7 +386,7 @@
                             <h2>Disposable Face Masks, Blue Face Masks</h2>
                             <div class="product-pricelist-ratting">
                                 <div class="price">
-                                    <span>$9.99</span> <del>$11.99</del>
+                                    <span>{{ $products_datas->price }}</span>
                                 </div>
                                 <div class="star">
                                     <ul>
@@ -388,10 +400,12 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p>Disposable Face Masks: 3-Layers Protection, the inner layer is a soft non-woven fabric,
+                            <p>Disposable Face Masks: 3-Layers Protection, the inner layer is a soft non-woven
+                                fabric,
                                 which can absorb the moisture from the breath of the wearer. The middle layer is a
                                 melt-blown polypropylene filtration layer for better filter out the particles in the
-                                air. The outer layer is a water-resistant layer which can block the splashing liquid in
+                                air. The outer layer is a water-resistant layer which can block the splashing liquid
+                                in
                                 the air.</p>
                             <div class="product-pricelist-selector">
                                 <div class="product-pricelist-selector-size">
@@ -536,8 +550,7 @@
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Product Details Area End -->
+        </section {{-- @endforeach --}} <!-- Product Details Area End -->
 
         <!-- Features Section Start -->
         <section class="features bg-lightwhite">
