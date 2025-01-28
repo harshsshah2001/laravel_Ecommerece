@@ -25,6 +25,7 @@ class Customer extends Authenticatable
         'city',
         'image',
         'phone',
+        'otp',
 
     ];
 

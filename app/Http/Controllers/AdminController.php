@@ -20,8 +20,8 @@ class AdminController extends Controller
     }
 
     public function show_all_data_function(){
-        $all_data = Customer::paginate(5);
-        return view('admin.show_all_data',['all_data'=>$all_data]);
+        $all_dataed = Customer::paginate(5);
+        return view('admin.show_all_data',['all_data'=>$all_dataed]);
     }
 
     public function delete_data_function($id){
@@ -125,5 +125,5 @@ DB::table('popular_products')->insert([
 toastr()->success('Your data has been successfully added.');
 
     }
-
+   
 }

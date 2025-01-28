@@ -477,7 +477,7 @@
                                                 <polyline points="15 18 9 12 15 6"></polyline>
                                             </svg>
                                             Return to Billing information</a>
-                                        <button class="btn bg-primary mt-0" type="submit">Continue</button>
+                                      <a href="{{route('final_buy')}}">  <button class="btn bg-primary mt-0" type="submit">Continue</button> </a>
                                     </div>
                                 </div>
                             </form>
@@ -524,7 +524,7 @@
                                 <p>Total Price</p>
                             </div>
                             <div class="total-price">
-                                <p>$174.99</p>
+                                <p>{{$shipping_data->price}}</p>
                             </div>
 
                         </div>

@@ -14,13 +14,15 @@ class Welcomemail extends Mailable
     use Queueable, SerializesModels;
     public $msg;
     public $sub;
+    public $otp;
     /**
      * Create a new message instance.
      */
-    public function __construct($msg,$subject)
+    public function __construct($msg,$subject,$otp)
     {
         $this->msg=$msg;
         $this->sub=$subject;
+        $this->otp = $otp;
     }
 
     /**
@@ -43,6 +45,7 @@ class Welcomemail extends Mailable
             with:[
                 'messageContent'=> $this->msg,
                 'subject'=> $this->subject,
+                'otp' => $this->otp
             ],
         );
     }

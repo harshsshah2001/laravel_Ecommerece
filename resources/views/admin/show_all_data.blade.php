@@ -109,50 +109,53 @@
             @csrf
             <button type="submit" class="btn btn-danger" style="margin-top: 10px;margin-bottom:10px" onclick="return confirm('Are you sure you want to delete these items?');">Delete Selected</button> --}}
 
-            <table>
-                <thead>
+        <table>
+            <thead>
+                <tr>
+                    {{-- <th>Delete Multiple</th> --}}
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($all_data as $key => $customers)
                     <tr>
-                        {{-- <th>Delete Multiple</th> --}}
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>City</th>
-                        <th>Image</th>
-                        <th>Action</th>
+                        {{-- <td><input type="checkbox" name="ids[]" value="{{ $customers->id }}"></td> --}}
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $customers->name }}</td>
+                        <td>{{ $customers->email }}</td>
+                        <td>{{ $customers->phone }}</td>
+                        <td>{{ $customers->city }}</td>
+
+                        @if ($customers->image)
+                            <td><img src="{{ asset('storage/' . $customers->image) }}" alt="Image"
+                                    style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></td>
+                        @else
+                            <td><span>No Image</span></td>
+                        @endif
+
+                        <td class="action-buttons">
+                            <a href="{{ route('update_form', $customers->id) }}">
+                                <button class="edit-button">Edit</button>
+                            </a>
+
+                            <form action="{{ route('delete_data', $customers->id) }}" method="POST"
+                                style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-button"
+                                    onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                            </form>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($all_data as $key => $customers)
-                        <tr>
-                            {{-- <td><input type="checkbox" name="ids[]" value="{{ $customers->id }}"></td> --}}
-                            <td>{{ $key + 1 }}</td>
-                            <td>{{ $customers->name }}</td>
-                            <td>{{ $customers->email }}</td>
-                            <td>{{ $customers->phone }}</td>
-                            <td>{{ $customers->city }}</td>
-
-                            @if ($customers->image)
-                                <td><img src="{{ asset('storage/' . $customers->image) }}" alt="Image" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></td>
-                            @else
-                                <td><span>No Image</span></td>
-                            @endif
-
-                            <td class="action-buttons">
-                                <a href="{{ route('update_form', $customers->id) }}">
-                                    <button class="edit-button">Edit</button>
-                                </a>
-
-                                <form action="{{ route('delete_data', $customers->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                @endforeach
+            </tbody>
+        </table>
         {{-- </form> --}}
 
 

@@ -7,7 +7,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Kernel;
 
-Route::get('/index',[Customercontroller::class,'index_page'])->name('index');
+Route::get('index', [Customercontroller::class, 'index_page'])->name('index');
+
 
 // Route::group(['middleware' => 'auth.custom'], function () {
 
@@ -41,6 +42,7 @@ Route::get('admin_mainpage_post', [AdminController::class, 'mainpage_function'])
 Route::post('mainpage_post', [AdminController::class, 'mainpage_post_function'])->name('mainpage_post');
 Route::get('show_data', [AdminController::class, 'show_all_data_function'])->name('show_data');
 Route::delete('delete_data/{id}', [AdminController::class, 'delete_data_function'])->name('delete_data');
+
 // Route::delete('delete_multiple_data', [AdminController::class, 'delete_multiple_data_function'])->name('delete_multiple_data');
 
 Route::get('update_form/{id}/edit', [AdminController::class, 'update_form_function'])->name('update_form');
@@ -51,5 +53,10 @@ Route::post('/popular_products_posts', [AdminController::class, 'popular_product
 // Admin Route Over
 
 Route::get('shop', [Customercontroller::class, 'shoping'])->name('shop');
+Route::get('buy_now/{id}', [Customercontroller::class, 'shipping_funciton'])->name('buy_now');
 
+
+
+Route::get('/verify-otp', [Customercontroller::class, 'showOtpForm'])->name('otp.verify');
+Route::post('/verify-otp', [Customercontroller::class, 'verifyOtp'])->name('otp.verify.submit');
 

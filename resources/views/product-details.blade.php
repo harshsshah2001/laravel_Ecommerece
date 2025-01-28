@@ -82,7 +82,7 @@
                 <div class="d-none d-lg-block">
                     <nav class="menu-area d-flex align-items-center">
                         <div class="logo">
-                            <a href="index.html"><img src="dist/images/logo/logo.png" alt="logo" /></a>
+                            <a href="index.html"><img src="{{ asset('images/logo/logo.png') }}" alt="logo" /></a>
                         </div>
                         <ul class="main-menu d-flex align-items-center">
                             <li><a class="active" href="index.html">Home</a></li>
@@ -351,7 +351,6 @@
         <!--Breadcrumb Area End -->
 
         <!-- Product Details Area Start -->
-        {{-- @foreach ($all_products_datas as $products_datas) --}}
         <section class="product">
             <div class="container">
                 <div class="row">
@@ -361,20 +360,19 @@
                                 <div class="exzoom_img_box">
                                     <ul class='exzoom_img_ul'>
 
-                                        @if ($products_datas->image != null && $products_datas->image != '')
+                                        {{-- @if ($products_datas->image != null && $products_datas->image != '')
                                             <img src="{{ asset('storage/public/uploads/' . $products_datas->image) }}"
                                                 alt="{{ $products_datas['image_name'] }}">
                                         @else
                                             <p>No image available.</p>
-                                        @endif
-
-
+                                        @endif --}}
 
                                         <img src="{{ asset('storage/' . $products_datas->image) }}"
                                             alt="{{ $products_datas->name }}">
                                         {{-- <li><img src="dist/images/product-deatils/2-big-image.jpg" /></li>
                                         <li><img src="dist/images/product-deatils/3-big-image.jpg" /></li>
                                         <li><img src="dist/images/product-deatils/4-big-image.jpg" /></li> --}}
+                                        <h3 style="margin-top: 30px">{{ $products_datas->image_name }}</h2>
                                     </ul>
                                 </div>
                                 <div class="exzoom_nav"></div>
@@ -383,7 +381,7 @@
                     </div>
                     <div class="col-lg-6 col-md-7 col-12">
                         <div class="product-pricelist">
-                            <h2>Disposable Face Masks, Blue Face Masks</h2>
+                            <h2>{{ $products_datas->image_name }}</h2>
                             <div class="product-pricelist-ratting">
                                 <div class="price">
                                     <span>{{ $products_datas->price }}</span>
@@ -452,16 +450,8 @@
                                 </div>
                             </div>
                             <div class="product-pricelist-selector-button">
-                                <a class="btn cart-bg " href="#">Add to cart
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-shopping-cart">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
-                                        </path>
-                                    </svg>
+                                <a class="btn cart-bg " href="{{route('buy_now',$products_datas->id)}}">Buy
+
                                 </a>
                                 <a class="btn bg-primary cart-hart" href="#">
                                     <svg id="Heart" xmlns="http://www.w3.org/2000/svg"

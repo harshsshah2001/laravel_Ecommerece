@@ -70,6 +70,12 @@
     <i class="fas fa-check-circle icon"></i> <!-- Font Awesome check icon -->
     <h1>Thank You!</h1>
     <p>Your submission has been received successfully.</p>
+<br><br>
+<h2>Your OTP Code</h2>
+<p>Your OTP code is: <strong>{{ $otp }}</strong></p>
+
+
+
     <a href="" class="back-button">Go Back to Home</a> <!-- Link to go back to home -->
 </div>
 

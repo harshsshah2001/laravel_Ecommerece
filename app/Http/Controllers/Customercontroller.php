@@ -37,6 +37,9 @@ class Customercontroller extends Controller
 
     ]);
 
+    $otp = rand(100000, 999999);
+    $otpExpiresAt = now()->addMinutes(10);
+
         $email = $validate['email'];
         $email_user = DB::table('customers')->where('email', $email)->first();
 
@@ -54,18 +57,42 @@ class Customercontroller extends Controller
                 'city' => $validate['city'],
                 'image' => $imagepath,
                 'phone' => $validate['phone'],
+                'otp'=>$otp,
             ]);
 
             $useremail = $validate['email'];
             $msg = "This Email Is Sent From Endel Digital Solution's";
             $subject = "Endel Mail";
-            Mail::to($useremail)->send(new Welcomemail($msg, $subject));
+            Mail::to($useremail)->send(new Welcomemail($msg, $subject,$otp));
 
             toastr()->success('Your data has been successfully registered.');
 
-            return redirect()->route('loginform');
+            // return redirect()->route('loginform');
+            return redirect()->route('otp.verify', ['email' => $request->email]);
         }
     }
+
+    public function showOtpForm(Request $request) {
+        return view('otp', ['email' => $request->email]);
+    }
+
+public function verifyOtp(Request $request) {
+
+    $request->validate([
+        'email' => 'required|email',
+        'otp' => 'required|digits:6',
+    ]);
+
+    $user = Customer::where('email', $request->email)->first(); // Use your User model here
+
+    // Check if user exists and validate OTP
+    if ($user && $user->otp === $request->otp) {
+
+        return redirect()->route('loginform')->with('success', 'Registration successful!');
+    }
+       return back()->withErrors(['otp' => 'Invalid or expired OTP']);
+}
+
 
 
 
@@ -118,15 +145,10 @@ class Customercontroller extends Controller
     public function products_details(){
                 return view('product-details');
     }
-    // public function products_cart_page_function($id){
 
-    //     $all_product_data = DB::table('popular_products')->where('id', $id)->first();
-    //             return view('product-details',['all_products_datas'=>$all_product_data]);
-    // }
 
     public function products_cart_page_function($id)
 {
-    // $product = Popular_products::with('image')->where('id', $id)->first();
 
     $products_datas = Popular_products::where('id', $id)->first();
 
@@ -134,24 +156,22 @@ class Customercontroller extends Controller
         return redirect()->back()->withErrors('Product not found.');
     }
 
-    // return view('product-details',['products_datas'=>$products_datas]);
-
     return view('product-details',compact('products_datas'));
 
-    // dd($products_datas->toArray()); // Debug to check if 'image' is being fetched
 }
 
 
+public function index_page()
+{
+    $data = DB::table('mainpictures')->get();
+    $popular_products_data = DB::table('popular_products')->get();
 
-
-    public function index_page(){
-        $data = DB::table('mainpictures')->get();
-        $popular_products_data = DB::table('popular_products')->get();
-
-        // print_r(json_encode($popular_products_data));die();
-
-        return view('index',['all_data'=>$data],['products_data'=>$popular_products_data]);
-    }
+    return view('index', [
+        'data' => $data,
+        'popular_products_data' => $popular_products_data
+        // dd($data)
+    ]);
+}
 
     public function email_user_forgot_password(){
         return view('email_enter_forget_password');
@@ -185,6 +205,12 @@ class Customercontroller extends Controller
     public function google_Authentication_function(){
       $googleuser = Socialite::driver('google')->user();
 
+}
+
+public function shipping_funciton($id)
+{
+    $shipping_data = DB::table('popular_products')->where('id', $id)->first();
+    return view('shipping', compact('shipping_data'));
 }
 
 }
