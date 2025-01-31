@@ -483,7 +483,7 @@
 
                                     <div class="cart-icon">
                                         <a href="#"><i class="far fa-heart"></i></a>
-                                        <a href="{{route('product-cart_page',$products_data->id)}}">
+                                        <a href="{{ route('product-cart_page', $products_data->id) }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16.75" height="16.75"
                                                 viewBox="0 0 16.75 16.75">
                                                 <g id="Your_Bag" data-name="Your Bag" transform="translate(0.75)">
@@ -514,7 +514,7 @@
                                     <span>{{ $products_data->price }}</span>
                                 </div>
                             </div>
-                            @endforeach
+                        @endforeach
                     </div>
                     <div class="slider-arrows">
                         <div class="prev-arrow">

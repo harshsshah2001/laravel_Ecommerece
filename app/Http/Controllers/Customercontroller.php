@@ -93,9 +93,6 @@ public function verifyOtp(Request $request) {
        return back()->withErrors(['otp' => 'Invalid or expired OTP']);
 }
 
-
-
-
     public function login(){
         return view('login');
     }
@@ -119,13 +116,26 @@ public function verifyOtp(Request $request) {
                 session()->put('name_session',$name);
 
                 Auth::loginUsingId($user->id);
-                return view('index');
+
+                $data = DB::table('mainpictures')->get();
+                $popular_products_data = DB::table('popular_products')->get();
+
+
+                return view('index',compact('data','popular_products_data'));
             } else {
                 return back()->withErrors(['password' => 'Invalid credentials.']);
             }
         } else {
             return back()->withErrors(['email' => 'No account found with that email.']);
         }
+
+
+
+        // ahiyathi tu kya data moklje j che !! atle undefined aave che
+        // index naa page maa data joyye che mane
+
+
+
 
     }
 
@@ -166,11 +176,15 @@ public function index_page()
     $data = DB::table('mainpictures')->get();
     $popular_products_data = DB::table('popular_products')->get();
 
-    return view('index', [
-        'data' => $data,
-        'popular_products_data' => $popular_products_data
+    // echo "<prev>". print_r($data);die();
+
+
+    return view('index',
+        // 'data' => $datas,
+        // 'popular_products_data' => $popular_products_data
         // dd($data)
-    ]);
+        compact('data','popular_products_data')
+    );
 }
 
     public function email_user_forgot_password(){
@@ -211,6 +225,10 @@ public function shipping_funciton($id)
 {
     $shipping_data = DB::table('popular_products')->where('id', $id)->first();
     return view('shipping', compact('shipping_data'));
+}
+
+public function pdf_function(Request $request){
+    echo "PDF";
 }
 
 }

@@ -120,6 +120,7 @@
                     <th>City</th>
                     <th>Image</th>
                     <th>Action</th>
+                    <th>Download_PDF</th>
                 </tr>
             </thead>
             <tbody>
@@ -152,6 +153,9 @@
                                     onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                             </form>
                         </td>
+
+                        {{-- for PDF Download  --}}
+                        <td><a href="{{route('pdf')}}"><button type="submit">Download</button></a></td>
                     </tr>
                 @endforeach
             </tbody>

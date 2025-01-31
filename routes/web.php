@@ -60,3 +60,7 @@ Route::get('buy_now/{id}', [Customercontroller::class, 'shipping_funciton'])->na
 Route::get('/verify-otp', [Customercontroller::class, 'showOtpForm'])->name('otp.verify');
 Route::post('/verify-otp', [Customercontroller::class, 'verifyOtp'])->name('otp.verify.submit');
 
+
+//for PDF Route
+Route::get('/pdf', [Customercontroller::class, 'pdf_function'])->name('pdf');
+
