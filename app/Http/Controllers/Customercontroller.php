@@ -13,7 +13,9 @@ use App\Mail\Welcomemail;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Customer;
 use App\Models\Popular_products;
-
+// use Barryvdh\DomPDF\Facade;
+use Barryvdh\DomPDF\Facade;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class Customercontroller extends Controller
@@ -227,8 +229,25 @@ public function shipping_funciton($id)
     return view('shipping', compact('shipping_data'));
 }
 
-public function pdf_function(Request $request){
-    echo "PDF";
+public function pdf_function(Request $request, $id) {
+    $customerData = Customer::find($id);
+
+    if (!$customerData) {
+        return response()->json(['error' => 'Customer not found'], 404);
+    }
+
+    $data = [
+        'title' => "Your Information Details",
+        'date' => now()->format('m/d/Y'),
+        'user' => $customerData,
+    ];
+
+    // Load the view and create the PDF
+    $pdf = Pdf::loadView('my_pdf', $data);
+
+    return $pdf->download('MyDetails.pdf');
 }
+
+
 
 }

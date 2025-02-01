@@ -103,7 +103,7 @@
 <body>
 
     <h2>All Data</h2>
-
+<a href=""><button type="submit" class="btn btn-warning">Download Excel</button> </a>
     <div class="table-container">
         {{-- <form action="{{ route('delete_multiple_data') }}" method="POST">
             @csrf
@@ -155,7 +155,7 @@
                         </td>
 
                         {{-- for PDF Download  --}}
-                        <td><a href="{{route('pdf')}}"><button type="submit">Download</button></a></td>
+                        <td><a href="{{route('pdf',$customers->id)}}"><button type="submit" class="btn btn-warning">Download</button></a></td>
                     </tr>
                 @endforeach
             </tbody>
