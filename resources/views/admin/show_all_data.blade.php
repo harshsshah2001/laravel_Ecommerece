@@ -103,7 +103,7 @@
 <body>
 
     <h2>All Data</h2>
-<a href=""><button type="submit" class="btn btn-warning">Download Excel</button> </a>
+<a href="{{route('Excel')}}"><button type="submit" class="btn btn-warning">Download Excel</button> </a>
     <div class="table-container">
         {{-- <form action="{{ route('delete_multiple_data') }}" method="POST">
             @csrf

@@ -63,3 +63,4 @@ Route::post('/verify-otp', [Customercontroller::class, 'verifyOtp'])->name('otp.
 
 //for PDF Route
 Route::get('/customer/pdf/{id}', [CustomerController::class, 'pdf_function'])->name('pdf');
+Route::get('/customer/excel', [CustomerController::class, 'Excel_function'])->name('Excel');

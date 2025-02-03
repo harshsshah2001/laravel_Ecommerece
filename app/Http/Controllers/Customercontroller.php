@@ -245,9 +245,18 @@ public function pdf_function(Request $request, $id) {
     // Load the view and create the PDF
     $pdf = Pdf::loadView('my_pdf', $data);
 
-    return $pdf->download('MyDetails.pdf');
+    $filename = 'My_data' . $id . '.pdf';
+
+    $pdf->save(public_path('All_pdf/' . $filename));
+
+    return $pdf->download($filename);
+
 }
 
+public function Excel_function()
+{
+    return Excel::download(new CustomersExport(), 'customers.xlsx');
+}
 
 
 }
