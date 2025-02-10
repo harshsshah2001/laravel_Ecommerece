@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Usercontroller;
-use App\Http\Controllers\Customercontroller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -12,10 +11,12 @@ use Illuminate\Support\Facades\Log; // Import the Log facade
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Welcomemail;
 use App\Mail\PdfMail;
+use Maatwebsite\Excel\Facades\Excel;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Customer;
 use App\Models\Popular_products;
-// use Barryvdh\DomPDF\Facade;
+use App\Exports\UsersExport;
+
 use Barryvdh\DomPDF\Facade;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -290,9 +291,9 @@ public function pdf_function(Request $request, $id) {
     $pdf->save($pdfPath);
 
     // Email sending logic
-    $useremail = session('email_session');
+    // $useremail = session('email_session');
 
-        Mail::to($useremail)->send(new PdfMail($filename));
+    //     Mail::to($useremail)->send(new PdfMail($filename));
 }
 
 
@@ -300,6 +301,6 @@ public function pdf_function(Request $request, $id) {
 
 public function Excel_function()
 {
-    return Excel::download(new CustomersExport(), 'customers.xlsx');
+    return Excel::download(new UsersExport(), 'customers.xlsx');
 }
 }

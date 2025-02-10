@@ -20,12 +20,11 @@ class Welcomemail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($msg, $subject, $otp)  // Make filename optional
+    public function __construct($msg, $subject, $otp)
     {
         $this->msg = $msg;
         $this->sub = $subject;
         $this->otp = $otp;
-
     }
 
     /**
@@ -49,7 +48,6 @@ class Welcomemail extends Mailable
                 'messageContent' => $this->msg,
                 'subject' => $this->sub,
                 'otp' => $this->otp,
-
             ],
         );
     }
@@ -57,10 +55,10 @@ class Welcomemail extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, 
      */
     public function attachments(): array
     {
-        $attachment = [];
+        return []; 
     }
 }
