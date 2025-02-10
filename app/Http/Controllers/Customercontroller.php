@@ -8,13 +8,16 @@ use App\Http\Controllers\Customercontroller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log; // Import the Log facade
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Welcomemail;
+use App\Mail\PdfMail;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Customer;
 use App\Models\Popular_products;
 // use Barryvdh\DomPDF\Facade;
 use Barryvdh\DomPDF\Facade;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
@@ -24,9 +27,10 @@ class Customercontroller extends Controller
         return view('register');
     }
 
+
     public function register_save_data(Request $request)
     {
-        $validate=$request->validate([
+        $validate = $request->validate([
             'name' => 'required|min:3|max:10',
             'email' => 'required|email',
             'password' => 'required|string',
@@ -34,20 +38,17 @@ class Customercontroller extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'phone' => 'required|string|max:15',
         ],
-    [
-        'name.required'=>'Enter the name'
+        [
+            'name.required' => 'Enter the name'
+        ]);
 
-    ]);
-
-    $otp = rand(100000, 999999);
-    $otpExpiresAt = now()->addMinutes(10);
+        $otp = rand(100000, 999999);
 
         $email = $validate['email'];
         $email_user = DB::table('customers')->where('email', $email)->first();
 
         if ($email_user) {
             toastr()->error('Your Email is already registered.');
-
             return redirect()->back();
         } else {
             $imagepath = $request->file('image')->store('uploads', 'public');
@@ -59,20 +60,36 @@ class Customercontroller extends Controller
                 'city' => $validate['city'],
                 'image' => $imagepath,
                 'phone' => $validate['phone'],
-                'otp'=>$otp,
+                'otp' => $otp,
             ]);
 
-            $useremail = $validate['email'];
+            // Define the array of email addresses
+            $emailAddresses = [
+                'parthvaishnav81@gmail.com',
+                'minimilitia1491@gmail.com',
+
+                $validate['email'], // Include the registered user's email
+            ];
+
             $msg = "This Email Is Sent From Endel Digital Solution's";
             $subject = "Endel Mail";
-            Mail::to($useremail)->send(new Welcomemail($msg, $subject,$otp));
 
-            toastr()->success('Your data has been successfully registered.');
+            try {
+                // Send the email to all addresses in the array
+                Mail::to($emailAddresses)->send(new Welcomemail($msg, $subject, $otp)); // filename as null
 
-            // return redirect()->route('loginform');
+                toastr()->success('Your data has been successfully registered. Email sent to multiple recipients!');
+            } catch (\Exception $e) {
+                // Log the error
+                Log::error('Error sending email to multiple recipients: ' . $e->getMessage());
+                toastr()->error('Registration successful, but there was an error sending the email.');
+            }
+
             return redirect()->route('otp.verify', ['email' => $request->email]);
         }
     }
+
+
 
     public function showOtpForm(Request $request) {
         return view('otp', ['email' => $request->email]);
@@ -251,12 +268,38 @@ public function pdf_function(Request $request, $id) {
 
     return $pdf->download($filename);
 
+    $customerData = Customer::find($id);
+
+    if (!$customerData) {
+        return response()->json(['error' => 'Customer not found'], 404);
+    }
+
+    $data = [
+        'title' => "Your Information Details",
+        'date' => now()->format('m/d/Y'),
+        'user' => $customerData,
+    ];
+
+    // Load the view and create the PDF
+    $pdf = Pdf::loadView('my_pdf', $data);
+
+    $filename = 'My_data' . $id . '.pdf';
+
+    // Save the PDF to the public/All_pdf directory
+    $pdfPath = public_path('All_pdf/' . $filename);
+    $pdf->save($pdfPath);
+
+    // Email sending logic
+    $useremail = session('email_session');
+
+        Mail::to($useremail)->send(new PdfMail($filename));
 }
+
+
+
 
 public function Excel_function()
 {
     return Excel::download(new CustomersExport(), 'customers.xlsx');
 }
-
-
 }

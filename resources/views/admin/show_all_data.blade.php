@@ -103,16 +103,21 @@
 <body>
 
     <h2>All Data</h2>
-<a href="{{route('Excel')}}"><button type="submit" class="btn btn-warning">Download Excel</button> </a>
-    <div class="table-container">
-        {{-- <form action="{{ route('delete_multiple_data') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-danger" style="margin-top: 10px;margin-bottom:10px" onclick="return confirm('Are you sure you want to delete these items?');">Delete Selected</button> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        @if (Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+        @endif
 
+        @if (Session::has('error'))
+            toastr.error("{{ Session::get('error') }}");
+        @endif
+    </script>
+    <a href="{{ route('Excel') }}"><button type="submit" class="btn btn-warning">Download Excel</button> </a>
+    <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    {{-- <th>Delete Multiple</th> --}}
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
@@ -124,10 +129,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($all_data as $key => $customers)
+                @php
+                    $i = 1;  // Initialize a counter *before* the loop
+                @endphp
+                @foreach ($all_data as $customers)
                     <tr>
-                        {{-- <td><input type="checkbox" name="ids[]" value="{{ $customers->id }}"></td> --}}
-                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $i++ }}</td>  <!-- Use the counter and increment it -->
                         <td>{{ $customers->name }}</td>
                         <td>{{ $customers->email }}</td>
                         <td>{{ $customers->phone }}</td>
@@ -155,25 +162,25 @@
                         </td>
 
                         {{-- for PDF Download  --}}
-                        <td><a href="{{route('pdf',$customers->id)}}"><button type="submit" class="btn btn-warning">Download</button></a></td>
+                        <td><a href="{{ route('pdf', $customers->id) }}"><button type="submit"
+                                    class="btn btn-warning">Download</button></a></td>
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot>  <!-- Move the tfoot *inside* the table -->
+                <tr class="table-footer" style="color: #007bff;margin-top:40px;">
+                    <td colspan="6" class="footer-text">Total Users:</td>
+                    <td class="footer-count">{{ $all_data->total() }}</td> <!-- use ->total() method -->
+                </tr>
+            </tfoot>
         </table>
-        {{-- </form> --}}
-
 
         <div class="pagination">
             {{ $all_data->links('pagination::bootstrap-5') }}
         </div>
     </div>
 
-    <tfoot>
-        <tr class="table-footer" style="color: #007bff;margin-top:40px;">
-            <td colspan="6" class="footer-text">Total Users:</td>
-            <td class="footer-count">{{ $key + 1 }}</td>
-        </tr>
-    </tfoot>
+
 
 </body>
 
