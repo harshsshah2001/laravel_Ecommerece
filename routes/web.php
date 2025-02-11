@@ -31,8 +31,6 @@ Route::post('loginforms', [Customercontroller::class, 'login_save_data'])->name(
 
 Route::post('logout', [CustomerController::class, 'logout_user'])->name('logout');
 
-Route::get('email_forgot_password', [CustomerController::class, 'email_user_forgot_password'])->name('email_forgot_password');
-Route::post('password_updates', [CustomerController::class, 'update_passworded'])->name('password_update');
 Route::get('auth_google', [CustomerController::class, 'google_login_function'])->name('auth_google');
 Route::get('auth_google-callback', [CustomerController::class, 'google_Authentication_function'])->name('auth_google_callback');
 
@@ -64,3 +62,8 @@ Route::post('/verify-otp', [Customercontroller::class, 'verifyOtp'])->name('otp.
 //for PDF Route
 Route::get('/customer/pdf/{id}', [CustomerController::class, 'pdf_function'])->name('pdf');
 Route::get('/customer/excel', [CustomerController::class, 'Excel_function'])->name('Excel');
+
+
+//Reser Password
+Route::get('/forgot_password', [CustomerController::class, 'Reset_password_function'])->name('forgot_password');
+

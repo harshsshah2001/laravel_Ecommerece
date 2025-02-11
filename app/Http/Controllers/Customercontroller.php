@@ -207,31 +207,7 @@ public function index_page()
     );
 }
 
-    public function email_user_forgot_password(){
-        return view('email_enter_forget_password');
-    }
 
-    public function update_passworded(Request $request){
-        $request->validate([
-            'email' => 'required|email|exists:customers,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        // Update the user's password
-        $updated = DB::table('customers')->where('email', $request->email)->update([
-            'password' => Hash::make($request->password),
-            'updated_at' => now(),
-        ]);
-
-
-        if ($updated) {
-            toastr()->success('Your Password Has Been Updated Successfully.');
-
-            return redirect()->route('login')->with('success', 'Password updated successfully.');
-        } else {
-            return redirect()->back()->withErrors(['error' => 'Password not updated.']);
-        }
-    }
     public function google_login_function(){
         return Socialite::driver('google')->redirect();
 
@@ -302,5 +278,11 @@ public function pdf_function(Request $request, $id) {
 public function Excel_function()
 {
     return Excel::download(new UsersExport(), 'customers.xlsx');
+}
+
+
+public function Reset_password_function()
+{
+    return view('forgot_password_email_page');
 }
 }

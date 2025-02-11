@@ -73,7 +73,7 @@
         @endif
     </script>
     <div class="form-container">
-        <form action="{{ route('password_update') }}" method="POST">
+        <form action="" method="POST">
             @csrf
             <div class="form-group">
                 <label for="email">Email Address</label>
