@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class UsersExport implements FromCollection, WithHeadings, WithEvents, WithColumnFormatting
 {
@@ -45,25 +47,36 @@ class UsersExport implements FromCollection, WithHeadings, WithEvents, WithColum
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getDelegate()->getStyle('1')
+                $sheet = $event->sheet->getDelegate();
+
+                // 1. Styling for the heading row
+                $sheet->getStyle('A1:D1') // Apply to entire heading row A1 to D1
                     ->getFont()
                     ->setSize(16)
                     ->setBold(true);
 
-                $event->sheet->getDelegate()->getStyle('A:D')
+                $sheet->getStyle('A1:D1') //Apply to entire heading row A1 to D1
                     ->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-                // Set column width to a larger size
+               $sheet->getStyle('A1:D1')->getFill()  // Apply to entire heading row
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FFADD8E6'); // Light blue background
+
+            $sheet->getStyle('A1:D1')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK); // Thick Border
+
+                // 2. Styling for the data rows (borders and alignment)
+                $lastRow = $sheet->getHighestRow();
+                $sheet->getStyle('A2:D' . $lastRow) // Apply to all data rows from row 2
+                    ->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $sheet->getStyle('A2:D' . $lastRow)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK); //Thick Border
+                //Set column width
                 $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(25);
                 $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(30);
                 $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(20);
                 $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(25);
-
-                    // Make the headings row bold
-                $event->sheet->getDelegate()->getStyle('1')
-                     ->getFont()
-                     ->setBold(true);
             },
         ];
     }
