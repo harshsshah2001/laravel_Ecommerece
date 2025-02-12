@@ -23,6 +23,7 @@ use Barryvdh\DomPDF\Facade;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\PasswordResetOtp;
 use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
 
 
 
@@ -305,7 +306,7 @@ public function Excel_function()
         }
         if ($customer) {
             $customer->otp = $otp;
-            // $customer->otp_expiry = now()->addMinutes(10); // OTP expires in 10 minutes
+             $customer->otp_expiry = now()->addMinutes(10); // OTP expires in 10 minutes
             $customer->save();
 
             // Send OTP via email
@@ -349,17 +350,25 @@ public function Excel_function()
             return redirect()->route('forgot.password.form')->with('error', 'Email not found in session. Please request OTP again.');
         }
 
-        $user = Customer::where('email', $email)->first();
+        $customer = Customer::where('email', $email)->first();
 
-        if (!$user) {
+        if (!$customer) {
             return redirect()->route('forgot.password.form')->with('error', 'User not found.');
         }
 
-        if ($user->otp == $otp ) {
+         // Check for OTP expiry
+         if ($customer->otp_expiry < now()) {
+            $customer->otp = null;
+            $customer->otp_expiry = null;
+            $customer->save();
+            return redirect()->back()->with('error', 'OTP has expired. Please request a new one.');
+        }
+
+        if ($customer->otp == $otp ) {
             // Clear OTP and expiry after successful verification
-            $user->otp = null;
-            // $user->otp_expiry = null;
-            $user->save();
+            $customer->otp = null;
+             $customer->otp_expiry = null;
+            $customer->save();
 
             Session::put('reset_token', Str::random(60)); // Generate a reset token
             return redirect()->route('reset.password.form')->with('success', 'OTP verified successfully.');

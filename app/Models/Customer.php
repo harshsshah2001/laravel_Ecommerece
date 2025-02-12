@@ -18,7 +18,6 @@ class Customer extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-
         'name',
         'email',
         'password',
@@ -26,7 +25,7 @@ class Customer extends Authenticatable
         'image',
         'phone',
         'otp',
-
+        'otp_expiry', // Add this line
     ];
 
     /**
