@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Usercontroller;
 use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log; // Import the Log facade
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use App\Mail\Welcomemail;
 use App\Mail\PdfMail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,10 +19,11 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\Customer;
 use App\Models\Popular_products;
 use App\Exports\UsersExport;
-
 use Barryvdh\DomPDF\Facade;
-
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\PasswordResetOtp;
+use Illuminate\Support\Facades\Session;
+
 
 
 class Customercontroller extends Controller
@@ -273,16 +277,137 @@ public function pdf_function(Request $request, $id) {
 }
 
 
-
-
 public function Excel_function()
 {
     return Excel::download(new UsersExport(), 'customers.xlsx');
 }
 
+    public function showForgotPasswordForm()
+    {
+        return view('auth.forgot-password'); // Make sure this view exists
+    }
 
-public function Reset_password_function()
-{
-    return view('forgot_password_email_page');
-}
+    public function sendOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:customers,email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $email = $request->input('email');
+        $otp = mt_rand(100000, 999999); // Generate a 6-digit OTP
+        $customer = Customer::where('email', $email)->first(); // Use $customer instead of $user
+        if(!$customer){
+           return redirect()->back()->with('error', 'Customer not found.');
+        }
+        if ($customer) {
+            $customer->otp = $otp;
+            // $customer->otp_expiry = now()->addMinutes(10); // OTP expires in 10 minutes
+            $customer->save();
+
+            // Send OTP via email
+            $emailMessage = 'Here is your OTP to reset your password.'; // Explicitly create a string
+            $emailSubject = 'Your OTP for Password Reset';
+
+            Mail::to($email)->send(new PasswordResetOtp(  // Updated Mailable class name
+                $emailMessage,
+                $emailSubject,
+                (string) $otp  // Explicitly cast OTP to a string
+            ));
+
+            Session::put('reset_email', $email); // Store email in session for later use
+
+            return redirect()->route('otp.verification.form')->with('success', 'OTP sent to your email address.');
+        }
+
+        return redirect()->back()->with('error', 'User not found.'); // Should not happen, as validation checks for email existence
+    }
+
+
+    public function showOtpVerificationForm()
+    {
+        return view('auth.otp-verification'); // Create this view
+    }
+
+    public function verifyOtps(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'otp' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $otp = $request->input('otp');
+        $email = Session::get('reset_email');
+
+        if (!$email) {
+            return redirect()->route('forgot.password.form')->with('error', 'Email not found in session. Please request OTP again.');
+        }
+
+        $user = Customer::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->route('forgot.password.form')->with('error', 'User not found.');
+        }
+
+        if ($user->otp == $otp ) {
+            // Clear OTP and expiry after successful verification
+            $user->otp = null;
+            // $user->otp_expiry = null;
+            $user->save();
+
+            Session::put('reset_token', Str::random(60)); // Generate a reset token
+            return redirect()->route('reset.password.form')->with('success', 'OTP verified successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Invalid OTP or OTP has expired.');
+        }
+    }
+
+    public function showResetPasswordForm()
+    {
+        // Verify reset token
+        if (!Session::has('reset_token')) {
+            return redirect()->route('forgot.password.form')->with('error', 'Invalid reset link.');
+        }
+        return view('auth.reset-password'); // Create this view
+    }
+
+    public function resetPassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $email = Session::get('reset_email');
+
+        if (!$email) {
+            toastr()->error('Your Email is Not registered.');
+
+            return redirect()->route('forgot.password.form')->with('error', 'Email not found in session. Please request OTP again.');
+        }
+
+        $user = Customer::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->route('forgot.password.form')->with('error', 'User not found.');
+        }
+
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+
+        Session::forget('reset_email');
+        Session::forget('reset_token');
+        return redirect()->route('loginform')->with('success', 'Password reset successfully. Please log in.');
+    }
+
 }

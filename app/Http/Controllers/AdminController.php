@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Customer;
-
+use Illuminate\Support\Facades\Str;
 
 class AdminController extends Controller
 {
@@ -125,5 +125,5 @@ DB::table('popular_products')->insert([
 toastr()->success('Your data has been successfully added.');
 
     }
-   
+
 }

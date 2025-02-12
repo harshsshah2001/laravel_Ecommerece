@@ -67,7 +67,7 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password">
             </div>
-            <a href="{{route('forgot_password')}}" class="forgot-password">Forgot Password?</a>
+            <a href="{{route('forgot.password.form')}}" class="forgot-password">Forgot Password?</a>
            <a href=""><button type="submit" class="btn btn-primary w-100 mt-3">Login</button> </a>
         </form>
     </div>

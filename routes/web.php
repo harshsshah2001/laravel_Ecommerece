@@ -65,5 +65,10 @@ Route::get('/customer/excel', [CustomerController::class, 'Excel_function'])->na
 
 
 //Reser Password
-Route::get('/forgot_password', [CustomerController::class, 'Reset_password_function'])->name('forgot_password');
+Route::get('/forgot-password', [CustomerController::class, 'showForgotPasswordForm'])->name('forgot.password.form');
+Route::post('/forgot-password', [CustomerController::class, 'sendOtp'])->name('otp.send');
+Route::get('/otp-verification', [CustomerController::class, 'showOtpVerificationForm'])->name('otp.verification.form');
+Route::post('/otp-verification', [CustomerController::class, 'verifyOtps'])->name('otp.verifys');
+Route::get('/reset-password', [CustomerController::class, 'showResetPasswordForm'])->name('reset.password.form');
+Route::post('/reset-password', [CustomerController::class, 'resetPassword'])->name('password.reset');
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Forgot Password</title>
+    <title>OTP Verification</title>
 
     <style>body {
         margin: 0;
@@ -152,28 +152,25 @@
 <body>
     <div class="container">
         <div class="form-wrapper">
-            <h1>Forgot Password</h1>
-            <p>Enter your email address to receive an OTP for resetting your password.</p>
+            <h1>OTP Verification</h1>
+            <p>Enter the OTP sent to your email address.</p>
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
             @if(session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <form action="{{ route('otp.send') }}" method="POST">
+            <form action="{{ route('otp.verifys') }}" method="POST">
                 @csrf
                 <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                    @error('email')
+                    <label for="otp">OTP</label>
+                    <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+                    @error('otp')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-                <button type="submit" class="send-otp-btn">Send OTP</button>
+                <button type="submit" class="verify-btn">Verify OTP</button>
             </form>
-            <div class="login-link">
-                {{-- Remember your password? <a href="{{ route('login') }}">Log In</a> --}}
-            </div>
         </div>
     </div>
 </body>
