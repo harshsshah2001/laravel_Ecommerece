@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,65 +8,65 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7fa; /* Light background color */
-            color: #333; /* Dark text color */
+            background-color: #f4f7fa;
+            color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full viewport height */
+            height: 100vh;
             margin: 0;
         }
 
         .container {
-            background: white; /* White background for form area */
+            background: white;
             padding: 30px;
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            width: 400px; /* Fixed width for the form */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
         }
 
         h1 {
             text-align: center;
-            color: #007BFF; /* Primary color for heading */
+            color: #007BFF;
             margin-bottom: 20px;
         }
 
         .form-group {
-            margin-bottom: 15px; /* Space between form elements */
+            margin-bottom: 15px;
         }
 
         label {
             display: block;
             margin-bottom: 5px;
-            font-weight: bold; /* Bold labels for clarity */
+            font-weight: bold;
         }
 
         input[type="text"] {
-            width: 100%; /* Full width input field */
+            width: 100%;
             padding: 10px;
-            border-radius: 5px; /* Rounded corners for input */
-            border: 1px solid #ccc; /* Light gray border */
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         input[type="text"]:focus {
-            border-color: #007BFF; /* Primary color on focus */
-            outline: none; /* Remove default outline */
+            border-color: #007BFF;
+            outline: none;
         }
 
         .btn {
-            width: 100%; /* Full width button */
+            width: 100%;
             padding: 10px;
-            background-color: #007BFF; /* Primary button color */
-            color: white; /* White text on button */
+            background-color: #007BFF;
+            color: white;
             border: none;
-            border-radius: 5px; /* Rounded corners for button */
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Larger font size for button text */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         .btn:hover {
-            background-color: #0056b3; /* Darker shade on hover */
+            background-color: #0056b3;
         }
 
         .alert {
@@ -77,14 +76,15 @@
         }
 
         .alert-danger {
-            background-color: #f8d7da; /* Light red background for error messages */
-            color: #721c24; /* Dark red text for error messages */
+            background-color: #f8d7da;
+            color: #721c24;
         }
 
         .error-messages {
             color: red;
         }
     </style>
+
 </head>
 
 <body>
@@ -96,7 +96,8 @@
 
             <div class="form-group">
                 <label for="otp">Enter OTP:</label>
-                <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror" name="otp" value="{{ old('otp') }}" required autofocus>
+                <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror"
+                    name="otp" value="{{ old('otp') }}" required autofocus>
                 @error('otp')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -104,7 +105,9 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn">Verify</button>
+            <button type="submit" id="submitOtp" class="btn" disabled>Verify</button>
+
+
 
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
@@ -119,6 +122,29 @@
             </div>
         @endif
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function checkInputs() {
+                var otpValue = $('#otp').val().trim();
+                var isNumeric = /^\d{6}$/.test(otpValue);
+                console.log("OTP Value:", otpValue);
+                console.log("Is Numeric:", isNumeric);
+
+                if (isNumeric) {
+                    $('#submitOtp').prop('disabled', true);
+                } else {
+                    $('#submitOtp').prop('disabled', false);
+                }
+            }
+
+            $('#otp').on('input change', checkInputs);
+
+            checkInputs();
+        });
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </body>
 
 </html>

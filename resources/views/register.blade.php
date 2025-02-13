@@ -51,41 +51,36 @@
                                 @csrf
 
                                 <div class="form__div">
-                                    <input type="text" class="form__input" name="name">
-                                    <label for="" class="form__label">Name</label>
+                                    <input type="text" class="form__input" name="name" id="nameInput">
+                                    <label for="nameInput" class="form__label">Name</label>
                                 </div>
-                                <span>@error('name'){{"$message"}}
-                                @enderror</span>
-
-
+                                <span>@error('name'){{ "$message" }}@enderror</span>
 
                                 <div class="form__div">
-                                    <input type="email" class="form__input" name="email">
-                                    <label for="" class="form__label">Email</label>
+                                    <input type="email" class="form__input" name="email" id="emailInput">
+                                    <label for="emailInput" class="form__label">Email</label>
                                 </div>
                                 <div class="form__div">
-                                    <input type="password" class="form__input" name="password">
-                                    <label for="" class="form__label">Password</label>
+                                    <input type="password" class="form__input" name="password" id="password">
+                                    <label for="password" class="form__label">Password</label>
                                 </div>
                                 <div class="form__div">
-                                    <input type="text" class="form__input" name="city">
-                                    <label for="" class="form__label">City</label>
+                                    <input type="text" class="form__input" name="city" id="city">
+                                    <label for="city" class="form__label">City</label>
                                 </div>
                                 <div class="form__div">
                                     <input type="file" id="imageUpload" accept="image/*" name="image"
-                                        onchange="previewImage(event)" style="padding-top: 10px;">
+                                        style="padding-top: 10px;" id="image">
                                     <label for="imageUpload" class="form__label">Choose Image</label>
-                                    <img id="imagePreview" src="" alt="" class="image-preview"
-                                        style="display:none;">
+                                    <img id="imagePreview" src="" alt="" class="image-preview" style="display:none;">
                                 </div>
 
                                 <div class="form__div">
-                                    <input type="number" class="form__input" name="phone">
-                                    <label for="" class="form__label">Phone Number</label>
+                                    <input type="number" class="form__input" name="phone" id="phone">
+                                    <label for="phone" class="form__label">Phone Number</label>
                                 </div>
 
-
-                                <a href=""><button type="submit" class="btn bg-primary">Sign Up</button></a>
+                                <button type="submit" class="btn bg-primary" id="submitOtp">Sign Up</button>
                             </form>
                         </div>
                     </div>
@@ -197,5 +192,35 @@
             document.getElementById("mySidenav").style.width = "0";
             $('#overlayy').removeClass("active");
         }
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function checkInputs() {
+            var name = $('#nameInput').val().trim();
+            var phone = $('#phone').val().trim();
+            var emailInput = $('#emailInput').val().trim();
+            var password = $('#password').val().trim();
+            var city = $('#city').val().trim();
+            var image = $('#imageUpload').val();
+
+            if (name && phone && emailInput && image && password && city) {
+                $('#submitOtp').removeClass('bg-gray-400 cursor-not-allowed').addClass('bg-blue-500 hover:bg-blue-600').prop('disabled', false);
+            } else {
+                $('#submitOtp').removeClass('bg-blue-500 hover:bg-blue-600').addClass('bg-gray-400 cursor-not-allowed').prop('disabled', true);
+            }
+        }
+
+        $('#nameInput, #emailInput, #phone, #password, #city, #imageUpload').on('input change', checkInputs);
+
+        // Initialize the button state on page load
+        checkInputs();
+    });
+
+   
+</script>
+
+
+
     </script>
 </body>
