@@ -3,7 +3,6 @@
 <head>
     <title>Forgot Password</title>
     <style>
-        /* Styles - Same as your provided CSS */
         body {
             margin: 0;
             padding: 0;
@@ -18,14 +17,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .container {
@@ -50,20 +43,14 @@
         }
 
         @keyframes slideInDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         p {
             color: #555;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .input-group {
@@ -78,7 +65,7 @@
             font-weight: bold;
         }
 
-        input[type="email"], input[type="password"], input[type="text"] {
+        input {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -88,13 +75,13 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
+        input:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
 
-        .send-otp-btn, .verify-btn, .reset-btn {
+        .btn {
             background-color: #007bff;
             color: white;
             padding: 14px 20px;
@@ -106,30 +93,20 @@
             transition: background-color 0.3s ease;
         }
 
-        .send-otp-btn:hover, .verify-btn:hover, .reset-btn:hover {
+        .btn:hover {
             background-color: #0056b3;
         }
 
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #555;
-        }
-
-        .login-link a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .login-link a:hover {
-            color: #0056b3;
+        .btn:disabled {
+            background-color: #b0c4de;
+            cursor: not-allowed;
         }
 
         .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
+            padding: .5em;
+            margin-bottom: .5em;
+            border-radius: .25em;
+            text-align: center;
         }
 
         .alert-success {
@@ -146,9 +123,25 @@
 
         .text-danger {
             color: #dc3545;
-            font-size: 0.8em;
-            margin-top: 5px;
+            font-size: .8em;
+            margin-top: .5em;
             display: block;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: .5em;
+            color: #555;
+        }
+
+        .login-link a {
+            color: #007bff;
+            text-decoration: none;
+            transition: .3s ease;
+        }
+
+        .login-link a:hover {
+            color: #0056b3;
         }
     </style>
 </head>
@@ -157,27 +150,56 @@
         <div class="form-wrapper">
             <h1>Forgot Password</h1>
             <p>Enter your email address to receive an OTP for resetting your password.</p>
+
+            <!-- Success & Error Messages -->
             @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success">{{ session('success') }}</div>
             @endif
             @if(session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
+            <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
+
+            <!-- Step 1: Send OTP Form -->
             <form action="{{ route('otp.send') }}" method="POST">
                 @csrf
                 <div class="input-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required oninput="toggleSendOtpButton()">
                     @error('email')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-                <button type="submit" class="send-otp-btn">Send OTP</button>
+                <button type="submit" class="btn" id="sendOtpButton" disabled>Send OTP</button>
             </form>
+
+            <hr>
+
+
             <div class="login-link">
-                {{-- Remember your password? <a href="{{ route('login') }}">Log In</a> --}}
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleSendOtpButton() {
+            const emailInput = document.getElementById('email');
+            const sendOtpButton = document.getElementById('sendOtpButton');
+
+            // Enable button if email is valid
+            sendOtpButton.disabled = !validateEmail(emailInput.value);
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex
+            return re.test(String(email).toLowerCase());
+        }
+
+        function toggleVerifyOtpButton() {
+            const otpInput = document.getElementById('otp');
+
+            // Enable button if OTP is exactly 6 digits
+            verifyOtpButton.disabled = !(otpInput.value.length === 6 && /^\d+$/.test(otpInput.value));
+        }
+    </script>
 </body>
 </html>

@@ -8,13 +8,13 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PasswordResetOtp extends Mailable // Renamed class
+class PasswordResetOtp extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $emailMessage; // Changed from $message, REMOVED type hint
-    public $subject;      // REMOVED type hint
-    public $otp;          // REMOVED type hint
+    public $emailMessage;
+    public $subject;
+    public $otp;
 
     public function __construct(string $emailMessage, string $subject, string $otp)
     {
@@ -35,7 +35,7 @@ class PasswordResetOtp extends Mailable // Renamed class
         return new Content(
             view: 'emails.forgot_otp',
             with: [
-                'message' => $this->emailMessage, // Use $emailMessage
+                'message' => $this->emailMessage,
                 'otp' => $this->otp,
             ],
         );

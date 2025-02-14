@@ -3,7 +3,6 @@
 <head>
     <title>Reset Password</title>
     <style>
-        /* Styles - Same as your provided CSS */
         body {
             margin: 0;
             padding: 0;
@@ -18,14 +17,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .container {
@@ -50,14 +43,8 @@
         }
 
         @keyframes slideInDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         p {
@@ -78,7 +65,7 @@
             font-weight: bold;
         }
 
-        input[type="email"], input[type="password"], input[type="text"] {
+        input[type="password"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -88,13 +75,13 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
+        input[type="password"]:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
 
-        .send-otp-btn, .verify-btn, .reset-btn {
+        .reset-btn {
             background-color: #007bff;
             color: white;
             padding: 14px 20px;
@@ -106,24 +93,13 @@
             transition: background-color 0.3s ease;
         }
 
-        .send-otp-btn:hover, .verify-btn:hover, .reset-btn:hover {
+        .reset-btn:hover {
             background-color: #0056b3;
         }
 
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #555;
-        }
-
-        .login-link a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .login-link a:hover {
-            color: #0056b3;
+        .reset-btn:disabled {
+            background-color: #b0c4de;
+            cursor: not-allowed;
         }
 
         .alert {
@@ -150,7 +126,6 @@
             margin-top: 5px;
             display: block;
         }
-
     </style>
 </head>
 <body>
@@ -168,18 +143,29 @@
                 @csrf
                 <div class="input-group">
                     <label for="password">New Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required oninput="validateInputs()">
                     @error('password')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="input-group">
                     <label for="password_confirmation">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" required>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required oninput="validateInputs()">
                 </div>
-                <button type="submit" class="reset-btn">Reset Password</button>
+                <button type="submit" class="reset-btn" id="resetPasswordButton" disabled>Reset Password</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function validateInputs() {
+            let password = document.getElementById('password').value;
+            let confirmPassword = document.getElementById('password_confirmation').value;
+            let resetButton = document.getElementById('resetPasswordButton');
+
+            // Enable button only when both fields are filled
+            resetButton.disabled = !(password.length > 0 && confirmPassword.length > 0);
+        }
+    </script>
 </body>
 </html>

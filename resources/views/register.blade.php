@@ -64,6 +64,24 @@
                                     <input type="password" class="form__input" name="password" id="password">
                                     <label for="password" class="form__label">Password</label>
                                 </div>
+                                <div class="show-password">
+                                    <input type="checkbox" id="togglePassword">
+                                    <label for="togglePassword">Show Password</label>
+                                </div>
+
+                                <script>
+                                    document.getElementById('togglePassword').addEventListener('change', function() {
+                                        let passwordField = document.getElementById('password');
+                                        passwordField.type = this.checked ? 'text' : 'password';
+                                    });
+                                </script>
+
+                                <style>
+                                    .show-password {
+                                        margin-top: 5px;
+                                        font-size: 14px;
+                                    }
+                                </style>
                                 <div class="form__div">
                                     <input type="text" class="form__input" name="city" id="city">
                                     <label for="city" class="form__label">City</label>
@@ -79,6 +97,7 @@
                                     <input type="number" class="form__input" name="phone" id="phone">
                                     <label for="phone" class="form__label">Phone Number</label>
                                 </div>
+                                <a href="{{route('loginform')}}" class="forgot-password" style="float: left;margin-bottom:10px">Login Here ?</a>
 
                                 <button type="submit" class="btn bg-primary" id="submitOtp">Sign Up</button>
                             </form>
@@ -217,7 +236,7 @@
         checkInputs();
     });
 
-   
+
 </script>
 
 

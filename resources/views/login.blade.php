@@ -42,6 +42,10 @@
         .btn-primary:hover {
             background: #2575fc;
         }
+        .btn-primary:disabled {
+            background: #8cbbf8;
+            cursor: not-allowed;
+        }
         .forgot-password {
             display: block;
             text-align: right;
@@ -58,19 +62,32 @@
     <div class="login-container">
         <h3 class="text-center">Login</h3>
         <form action="{{ route('loginform_data') }}" method="POST">
-@csrf
+            @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email">
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" oninput="validateInputs()">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password">
+                <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" oninput="validateInputs()">
             </div>
-            <a href="{{route('forgot.password.form')}}" class="forgot-password">Forgot Password?</a>
-           <a href=""><button type="submit" class="btn btn-primary w-100 mt-3">Login</button> </a>
+            <a href="{{route('registerform')}}" class="forgot-password" style="float: left;">Already Register?</a>
+                        <a href="{{route('forgot.password.form')}}" style="float: right;" class="forgot-password">Forgot Password?</a>
+            <button type="submit" class="btn btn-primary w-100 mt-3" id="loginButton" disabled>Login</button>
         </form>
     </div>
+
+    <script>
+        function validateInputs() {
+            let email = document.getElementById('email').value.trim();
+            let password = document.getElementById('password').value.trim();
+            let loginButton = document.getElementById('loginButton');
+
+            // Enable button only when both fields are filled
+            loginButton.disabled = !(email.length > 0 && password.length > 0);
+        }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
