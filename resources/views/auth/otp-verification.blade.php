@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>OTP Verification</title>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
-        /* Styles - Same as your provided CSS */
         body {
             margin: 0;
             padding: 0;
@@ -23,6 +25,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -55,6 +58,7 @@
                 transform: translateY(-100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -79,7 +83,7 @@
             font-weight: bold;
         }
 
-        input[type="email"], input[type="password"], input[type="text"] {
+        input[type="text"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -89,13 +93,13 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
-            border-color: #007bff;
+        input[type="text"]:focus {
+            border-color: #14c732;
             outline: none;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
 
-        .send-otp-btn, .verify-btn, .reset-btn {
+        .verify-btn {
             background-color: #007bff;
             color: white;
             padding: 14px 20px;
@@ -107,24 +111,13 @@
             transition: background-color 0.3s ease;
         }
 
-        .send-otp-btn:hover, .verify-btn:hover, .reset-btn:hover {
+        .verify-btn:hover {
             background-color: #0056b3;
         }
 
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #555;
-        }
-
-        .login-link a {
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .login-link a:hover {
-            color: #0056b3;
+        .verify-btn:disabled {
+            background-color: #ADD8E6; /* Light Blue */
+            cursor: not-allowed;
         }
 
         .alert {
@@ -153,18 +146,20 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="form-wrapper">
             <h1>OTP Verification</h1>
+
             <p>Enter the OTP sent to your email address.</p>
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
-            @if(session('error'))
+            @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <form action="{{ route('otp.verifys') }}" method="POST">
+            <form action="{{ route('otp.verifys') }}" method="POST" id="otpForm">
                 @csrf
                 <div class="input-group">
                     <label for="otp">OTP</label>
@@ -173,9 +168,44 @@
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
-                <button type="submit" class="verify-btn">Verify OTP</button>
+                <button type="submit" class="verify-btn" id="verifyBtn" disabled>Verify OTP</button>
             </form>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const otpInput = $('#otp');
+            const verifyBtn = $('#verifyBtn');
+            const otpForm = $('#otpForm');
+
+            // Initialize Toastr options
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right"
+            };
+
+            function validateOTP() {
+                const otpValue = otpInput.val().trim();
+                const isValidOTP = /^\d{6}$/.test(otpValue);
+                verifyBtn.prop('disabled', !isValidOTP);
+            }
+
+            otpInput.on('input', validateOTP);
+            validateOTP();
+
+            otpForm.on('submit', function(e) {
+                const otpValue = otpInput.val().trim();
+                if (!/^\d{6}$/.test(otpValue)) {
+                    e.preventDefault();
+                    toastr.error("Please enter a valid 6-digit OTP.");
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

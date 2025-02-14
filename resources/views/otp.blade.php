@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+    // Your Script
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</body>
+
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -96,8 +106,8 @@
 
             <div class="form-group">
                 <label for="otp">Enter OTP:</label>
-                <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror"
-                    name="otp" value="{{ old('otp') }}" required autofocus>
+                <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror" name="otp"
+                    value="{{ old('otp') }}" required autofocus>
                 @error('otp')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -125,24 +135,60 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            function checkInputs() {
-                var otpValue = $('#otp').val().trim();
-                var isNumeric = /^\d{6}$/.test(otpValue);
-                console.log("OTP Value:", otpValue);
-                console.log("Is Numeric:", isNumeric);
+            const submitOtpButton = $('#submitOtp');
+            const otpInput = $('#otp');
 
-                if (isNumeric) {
-                    $('#submitOtp').prop('disabled', true);
+            function checkInputs() {
+                var otpValue = otpInput.val().trim();
+                var isNumeric = /^\d{6}$/.test(otpValue);
+
+                if (otpValue && isNumeric) {
+                    submitOtpButton.prop('disabled', false); // Enable
                 } else {
-                    $('#submitOtp').prop('disabled', false);
+                    submitOtpButton.prop('disabled', true); // Explicitly Disable
                 }
             }
 
-            $('#otp').on('input change', checkInputs);
+            otpInput.on('input', checkInputs);
 
-            checkInputs();
+            checkInputs(); // Call on document ready to set initial state
         });
     </script>
+
+<script>
+    $(document).ready(function() {
+        const submitOtpButton = $('#submitOtp');
+        const otpInput = $('#otp');
+
+        function checkInputs() {
+            var otpValue = otpInput.val().trim();
+            var isNumeric = /^\d{6}$/.test(otpValue);
+
+            if (otpValue && isNumeric) {
+                submitOtpButton.prop('disabled', false); // Enable
+            } else {
+                submitOtpButton.prop('disabled', true); // Explicitly Disable
+            }
+        }
+
+        otpInput.on('input', checkInputs);
+
+        checkInputs(); // Call on document ready to set initial state
+
+        // Prevent form submission if OTP is invalid and show Toastr
+        $('form').on('submit', function(event) {
+            const otpValue = otpInput.val().trim();
+            if (!otpValue) {
+                event.preventDefault(); // Prevent form submission
+                toastr.error('Please fill in the OTP.'); // Show Toastr error
+            } else if (!/^\d{6}$/.test(otpValue)) {
+                event.preventDefault();
+                toastr.error('Please enter a valid 6-digit OTP.');
+            }
+        });
+    });
+</script>
+
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </body>
