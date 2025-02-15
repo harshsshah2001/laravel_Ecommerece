@@ -6,6 +6,7 @@ use App\Http\Controllers\Customercontroller;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Kernel;
+use App\Http\Controllers\RazorpayPaymentController;
 
 Route::get('index', [Customercontroller::class, 'index_page'])->name('index');
 
@@ -72,3 +73,7 @@ Route::post('/otp-verification', [CustomerController::class, 'verifyOtps'])->nam
 Route::get('/reset-password', [CustomerController::class, 'showResetPasswordForm'])->name('reset.password.form');
 Route::post('/reset-password', [CustomerController::class, 'resetPassword'])->name('password.reset');
 
+//For payment Gateway
+
+Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index']);
+Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');

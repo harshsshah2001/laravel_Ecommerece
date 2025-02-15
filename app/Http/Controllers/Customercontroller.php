@@ -388,9 +388,28 @@ public function Excel_function()
 
     public function resetPassword(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'password' => 'required|min:8|confirmed',
+            'password' => [
+                'required',
+                'min:8',
+                'confirmed',
+                function ($attribute, $value, $fail) {
+                    // Check for at least one numeric character
+                    if (!preg_match('/[0-9]/', $value)) {
+                        $fail('The password must contain at least one numeric character or alphabatic or special character.');
+                    }
+
+                    // Check for at least one alphabetic character
+                    if (!preg_match('/[a-zA-Z]/', $value)) {
+                        $fail('The password must contain at least one alphabetic character.');
+                    }
+
+                    // Check for at least one special character
+                    if (!preg_match('/[^a-zA-Z0-9]/', $value)) {
+                        $fail('The password must contain at least one special character.');
+                    }
+                },
+            ],
         ]);
 
         if ($validator->fails()) {
@@ -401,7 +420,6 @@ public function Excel_function()
 
         if (!$email) {
             toastr()->error('Your Email is Not registered.');
-
             return redirect()->route('forgot.password.form')->with('error', 'Email not found in session. Please request OTP again.');
         }
 
@@ -418,5 +436,6 @@ public function Excel_function()
         Session::forget('reset_token');
         return redirect()->route('loginform')->with('success', 'Password reset successfully. Please log in.');
     }
+
 
 }
