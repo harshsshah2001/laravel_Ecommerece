@@ -11,11 +11,11 @@ use App\Http\Controllers\RazorpayPaymentController;
 Route::get('index', [Customercontroller::class, 'index_page'])->name('index');
 
 
-// Route::group(['middleware' => 'auth.custom'], function () {
-
-//     Route::get('product-details', [Customercontroller::class, 'products_details'])->name('product-details');
-
+// Route::group(['middleware' => 'auth'], function () {
+    Route::get('razorpay-payments', [RazorpayPaymentController::class, 'index'])->name('razorpay-payments');
+    Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
 // });
+
 
 Route::get('product-details', [CustomerController::class, 'products_details'])->name('product-details');
 
@@ -77,5 +77,3 @@ Route::post('/reset-password', [CustomerController::class, 'resetPassword'])->na
 
 //For payment Gateway
 
-Route::get('razorpay-payments', [RazorpayPaymentController::class, 'index'])->name('razorpay-payments');
-Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
