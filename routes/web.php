@@ -49,6 +49,8 @@ Route::put('update_form/{id}', [AdminController::class, 'update_profile_function
 
 Route::get('popular_products_post', [AdminController::class, 'popular_products_get_function'])->name('popular_products_get_post');
 Route::post('/popular_products_posts', [AdminController::class, 'popular_products_post_function'])->name('popular_products_post');
+
+Route::get('/shipping/{id}', [AdminController::class, 'shipping_function'])->name('shipping');
 // Admin Route Over
 
 Route::get('shop', [Customercontroller::class, 'shoping'])->name('shop');
@@ -75,5 +77,5 @@ Route::post('/reset-password', [CustomerController::class, 'resetPassword'])->na
 
 //For payment Gateway
 
-Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index']);
+Route::get('razorpay-payments', [RazorpayPaymentController::class, 'index'])->name('razorpay-payments');
 Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');

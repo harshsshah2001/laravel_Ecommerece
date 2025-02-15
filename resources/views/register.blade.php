@@ -12,6 +12,11 @@
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <style>
         .image-preview {
             margin-top: 10px;
@@ -44,6 +49,7 @@
                                 @if (Session::has('error'))
                                     toastr.error("{{ Session::get('error') }}");
                                 @endif
+
                             </script>
 
                             <form action="{{ route('registerform_data') }}" method="post"
@@ -54,16 +60,23 @@
                                     <input type="text" class="form__input" name="name" id="nameInput">
                                     <label for="nameInput" class="form__label">Name</label>
                                 </div>
+
                                 <span>@error('name'){{ "$message" }}@enderror</span>
 
                                 <div class="form__div">
                                     <input type="email" class="form__input" name="email" id="emailInput">
                                     <label for="emailInput" class="form__label">Email</label>
                                 </div>
+                                @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
                                 <div class="form__div">
                                     <input type="password" class="form__input" name="password" id="password">
                                     <label for="password" class="form__label">Password</label>
                                 </div>
+                                @error('password')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                                 <div class="show-password">
                                     <input type="checkbox" id="togglePassword">
                                     <label for="togglePassword">Show Password</label>
@@ -86,6 +99,9 @@
                                     <input type="text" class="form__input" name="city" id="city">
                                     <label for="city" class="form__label">City</label>
                                 </div>
+                                @error('city')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
                                 <div class="form__div">
                                     <input type="file" id="imageUpload" accept="image/*" name="image"
                                         style="padding-top: 10px;" id="image">

@@ -53,11 +53,11 @@
                                     src="https://checkout.razorpay.com/v1/checkout.js"
                                     data-key="rzp_test_Oy9e95ZeYiEu7D"
                                     data-amount="10000"
-                                    data-name="Your Company Name"
+                                    data-name="EndelDigital Solution"
                                     data-description="Razorpay Payment"
-                                    data-image="https://www.example.com/logo.png"
-                                    data-prefill.name="{{ old('name') }}"
-                                    data-prefill.email="{{ old('email') }}"
+                                    data-image="https://www.google.com/imgres?q=endel%20digital%20solutions&imgurl=https%3A%2F%2Fendel.digital%2Fwp-content%2Fuploads%2F2024%2F11%2FEndel-Digital-Solutions-Pvt.-Ltdw3-3-1024x347.png&imgrefurl=https%3A%2F%2Fendel.digital%2F&docid=0eFHo39XvBdUAM&tbnid=YJuZQLWnv0XyOM&vet=12ahUKEwiN6Yy5rsWLAxUpcfUHHSHqJOEQM3oECBYQAA..i&w=1024&h=347&hcb=2&ved=2ahUKEwiN6Yy5rsWLAxUpcfUHHSHqJOEQM3oECBYQAA"
+                                    data-prefill.name="{{ old('name_session') }}"
+                                    data-prefill.email="{{ session('email_session') }}"
                                     data-theme.color="#ff7529"
                                 ></script>
 

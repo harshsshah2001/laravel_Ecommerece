@@ -36,21 +36,74 @@ class Customercontroller extends Controller
 
     public function register_save_data(Request $request)
     {
-        $validate = $request->validate([
+        $validate = Validator::make($request->all(), [
             'name' => 'required|min:3|max:10',
             'email' => 'required|email',
-            'password' => 'required|string',
+            'password' => [
+                'required',
+                'min:8',
+                function ($attribute, $value, $fail) {
+                    $errors = [];
+
+                    // Check for at least one numeric character
+                    if (!preg_match('/[0-9]/', $value)) {
+                        $errors[] = 'at least one numeric character';
+                    }
+
+                    // Check for at least one alphabetic character
+                    if (!preg_match('/[a-zA-Z]/', $value)) {
+                        $errors[] = 'at least one alphabetic character';
+                    }
+
+                    // Check for at least one special character
+                    // if (!preg_match('/[^a-zA-Z0-9]/', $value)) {
+                    //     $errors[] = 'at least one special character';
+                    // }
+
+                    // // Check for only alphabetic characters
+                    // if (preg_match('/^[a-zA-Z]+$/', $value)) {
+                    //     $fail('The password must contain alphabetic characters.');
+                    // }
+
+                    // // Check for only numeric characters
+                    // if (preg_match('/^[0-9]+$/', $value)) {
+                    //     $fail('The password mustb contain only one numeric characters.');
+                    // }
+
+                    // // Check for only special characters
+                    // if (preg_match('/^[^a-zA-Z0-9]+$/', $value)) {
+                    //     $fail('The password must not contain only special characters.');
+                    // }
+
+                    // New check to ensure the password contains at least one of each type
+                    if (empty($errors) && !(
+                        preg_match('/[0-9]/', $value) &&
+                        preg_match('/[a-zA-Z]/', $value) &&
+                        preg_match('/[^a-zA-Z0-9]/', $value)
+                    )) {
+                        $fail('The password must contain at least one numeric character, one alphabetic character, and one special character.');
+                    }
+
+                    if (!empty($errors)) {
+                        $fail('The password must contain ' . implode(', ', $errors) . '.');
+                    }
+                },
+            ],
             'city' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'phone' => 'required|string|max:15',
-        ],
-        [
+        ], [
             'name.required' => 'Enter the name'
         ]);
 
+        if ($validate->fails()) {
+            return redirect()->back()->withErrors($validate)->withInput();
+        }
+
+        $validatedData = $validate->validated();
         $otp = rand(100000, 999999);
 
-        $email = $validate['email'];
+        $email = $validatedData['email'];
         $email_user = DB::table('customers')->where('email', $email)->first();
 
         if ($email_user) {
@@ -60,12 +113,12 @@ class Customercontroller extends Controller
             $imagepath = $request->file('image')->store('uploads', 'public');
 
             DB::table('customers')->insert([
-                'name' => $validate['name'],
-                'email' => $validate['email'],
-                'password' => Hash::make($validate['password']),
-                'city' => $validate['city'],
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'city' => $validatedData['city'],
                 'image' => $imagepath,
-                'phone' => $validate['phone'],
+                'phone' => $validatedData['phone'],
                 'otp' => $otp,
             ]);
 
@@ -73,8 +126,7 @@ class Customercontroller extends Controller
             $emailAddresses = [
                 'parthvaishnav81@gmail.com',
                 'minimilitia1491@gmail.com',
-
-                $validate['email'], // Include the registered user's email
+                $validatedData['email'], // Include the registered user's email
             ];
 
             $msg = "This Email Is Sent From Endel Digital Solution's";
@@ -82,7 +134,7 @@ class Customercontroller extends Controller
 
             try {
                 // Send the email to all addresses in the array
-                Mail::to($emailAddresses)->send(new Welcomemail($msg, $subject, $otp)); // filename as null
+                Mail::to($emailAddresses)->send(new Welcomemail($msg, $subject, $otp));
 
                 toastr()->success('Your data has been successfully registered. Email sent to multiple recipients!');
             } catch (\Exception $e) {
@@ -94,6 +146,7 @@ class Customercontroller extends Controller
             return redirect()->route('otp.verify', ['email' => $request->email]);
         }
     }
+
 
 
 
@@ -436,6 +489,5 @@ public function Excel_function()
         Session::forget('reset_token');
         return redirect()->route('loginform')->with('success', 'Password reset successfully. Please log in.');
     }
-
 
 }

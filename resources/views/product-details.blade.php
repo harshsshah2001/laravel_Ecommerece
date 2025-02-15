@@ -450,7 +450,7 @@
                                 </div>
                             </div>
                             <div class="product-pricelist-selector-button">
-                                <a class="btn cart-bg " href="{{route('buy_now',$products_datas->id)}}">Buy
+                                <a class="btn cart-bg " href="{{route('shipping',$products_datas->id)}}">Buy
 
                                 </a>
                                 <a class="btn bg-primary cart-hart" href="#">

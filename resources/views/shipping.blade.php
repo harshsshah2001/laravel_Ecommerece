@@ -477,7 +477,8 @@
                                                 <polyline points="15 18 9 12 15 6"></polyline>
                                             </svg>
                                             Return to Billing information</a>
-                                      <a href="{{route('final_buy')}}">  <button class="btn bg-primary mt-0" type="submit">Continue</button> </a>
+                                      {{-- <a href=""><button class="btn bg-primary mt-0" type="submit">But Now</button> </a> --}}
+                                      <a href="{{ route('razorpay-payments') }}" style="background-color:rgb(147, 253, 147);padding:12px;border-radius:4px">Pay Now</a>
                                     </div>
                                 </div>
                             </form>
@@ -524,7 +525,7 @@
                                 <p>Total Price</p>
                             </div>
                             <div class="total-price">
-                                <p>{{$shipping_data->price}}</p>
+                                <p>{{$data->price}}</p>
                             </div>
 
                         </div>
