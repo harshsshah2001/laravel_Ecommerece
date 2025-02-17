@@ -56,8 +56,6 @@ Route::get('/shipping/{id}', [AdminController::class, 'shipping_function'])->nam
 Route::get('shop', [Customercontroller::class, 'shoping'])->name('shop');
 Route::get('buy_now/{id}', [Customercontroller::class, 'shipping_funciton'])->name('buy_now');
 
-
-
 Route::get('/verify-otp', [Customercontroller::class, 'showOtpForm'])->name('otp.verify');
 Route::post('/verify-otp', [Customercontroller::class, 'verifyOtp'])->name('otp.verify.submit');
 

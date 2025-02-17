@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -63,8 +63,8 @@
 
                                 <input type="hidden" name="hidden">
                                 <!-- This button is for fallback, if Razorpay script fails -->
-                                <button type="submit" class="btn btn-primary mt-3">Pay Now</button>
-                            </form>
+                                {{-- <button type="submit" class="btn btn-primary mt-3">Pay Now</button> --}}
+                            {{-- </form>
                         </div>
                     </div>
 
@@ -76,4 +76,4 @@
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-</html>
+</html> --}} 

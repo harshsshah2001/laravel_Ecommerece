@@ -8,6 +8,10 @@ use Session;
 use Exception;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PurchaseConfirmation;
+use Illuminate\Support\Facades\Auth;
+
 
 class RazorpayPaymentController extends Controller
 {
@@ -46,16 +50,29 @@ class RazorpayPaymentController extends Controller
             // Fetch the payment details from Razorpay
             $payment = $api->payment->fetch($paymentId);
 
-            // Capture the payment (if not already captured)
-            if ($payment->status !== 'captured') { // Check payment status
-                $api->payment->fetch($paymentId)->capture(['amount' => $payment->amount]);
+            // Capture the payment if it is not already captured
+            if ($payment->status !== 'captured') {
+                $payment->capture(['amount' => $payment->amount]);
+            }
+
+            // Retrieve email from session
+            $emailSession = session('email_session');
+
+            if (!empty($emailSession)) {
+                try {
+                    Mail::to($emailSession)->send(new PurchaseConfirmation());
+                } catch (\Exception $e) {
+                    \Log::error("Failed to send purchase confirmation email: " . $e->getMessage());
+                    Session::put('error', 'Payment successful but failed to send confirmation email.');
+                    return redirect()->back();
+                }
             }
 
             Session::put('success', 'Payment successful!');
             return redirect()->back();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Session::put('error', 'Razorpay payment failed: ' . $e->getMessage());
             return redirect()->back();
         }
-    }
+}
 }
