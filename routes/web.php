@@ -6,15 +6,16 @@ use App\Http\Controllers\Customercontroller;
 use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Kernel;
+use App\Http\Controllers\RazorpayPaymentController;
 
 Route::get('index', [Customercontroller::class, 'index_page'])->name('index');
 
 
-// Route::group(['middleware' => 'auth.custom'], function () {
-
-//     Route::get('product-details', [Customercontroller::class, 'products_details'])->name('product-details');
-
+// Route::group(['middleware' => 'auth'], function () {
+    Route::get('razorpay-payments', [RazorpayPaymentController::class, 'index'])->name('razorpay-payments');
+    Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
 // });
+
 
 Route::get('product-details', [CustomerController::class, 'products_details'])->name('product-details');
 
@@ -48,6 +49,8 @@ Route::put('update_form/{id}', [AdminController::class, 'update_profile_function
 
 Route::get('popular_products_post', [AdminController::class, 'popular_products_get_function'])->name('popular_products_get_post');
 Route::post('/popular_products_posts', [AdminController::class, 'popular_products_post_function'])->name('popular_products_post');
+
+Route::get('/shipping/{id}', [AdminController::class, 'shipping_function'])->name('shipping');
 // Admin Route Over
 
 Route::get('shop', [Customercontroller::class, 'shoping'])->name('shop');
@@ -71,4 +74,6 @@ Route::get('/otp-verification', [CustomerController::class, 'showOtpVerification
 Route::post('/otp-verification', [CustomerController::class, 'verifyOtps'])->name('otp.verifys');
 Route::get('/reset-password', [CustomerController::class, 'showResetPasswordForm'])->name('reset.password.form');
 Route::post('/reset-password', [CustomerController::class, 'resetPassword'])->name('password.reset');
+
+//For payment Gateway
 

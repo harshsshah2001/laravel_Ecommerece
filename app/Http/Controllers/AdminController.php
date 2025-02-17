@@ -126,4 +126,10 @@ toastr()->success('Your data has been successfully added.');
 
     }
 
+
+    public function shipping_function($id){
+        $data = DB::table('popular_products')->where('id', $id)->first();
+
+        return view('shipping',compact('data'));
+    }
 }

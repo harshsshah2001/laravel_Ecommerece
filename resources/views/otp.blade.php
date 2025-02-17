@@ -8,12 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script>
-    // Your Script
-    </script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</body>
 
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
         body {
@@ -106,16 +102,14 @@
 
             <div class="form-group">
                 <label for="otp">Enter OTP:</label>
-                <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror" name="otp"
-                    value="{{ old('otp') }}" required autofocus>
+                <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror"
+                    name="otp" value="{{ old('otp') }}" required autofocus>
                 @error('otp')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                    <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
 
-            <button type="submit" id="submitOtp" class="btn" disabled>Verify</button>
+            <button type="submit" id="submitOtp" class="btn">Verify</button>
 
 
 
@@ -132,65 +126,29 @@
             </div>
         @endif
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
-        $(document).ready(function() {
-            const submitOtpButton = $('#submitOtp');
-            const otpInput = $('#otp');
+        function toggleSendOtpButton() {
+            const emailInput = document.getElementById('opt');
+            // const sendOtpButton = document.getElementById('sendOtpButton');
 
-            function checkInputs() {
-                var otpValue = otpInput.val().trim();
-                var isNumeric = /^\d{6}$/.test(otpValue);
-
-                if (otpValue && isNumeric) {
-                    submitOtpButton.prop('disabled', false); // Enable
-                } else {
-                    submitOtpButton.prop('disabled', true); // Explicitly Disable
-                }
-            }
-
-            otpInput.on('input', checkInputs);
-
-            checkInputs(); // Call on document ready to set initial state
-        });
-    </script>
-
-<script>
-    $(document).ready(function() {
-        const submitOtpButton = $('#submitOtp');
-        const otpInput = $('#otp');
-
-        function checkInputs() {
-            var otpValue = otpInput.val().trim();
-            var isNumeric = /^\d{6}$/.test(otpValue);
-
-            if (otpValue && isNumeric) {
-                submitOtpButton.prop('disabled', false); // Enable
-            } else {
-                submitOtpButton.prop('disabled', true); // Explicitly Disable
-            }
+            // Enable button if email is valid
+            sendOtpButton.disabled = !validateEmail(emailInput.value);
         }
 
-        otpInput.on('input', checkInputs);
+        function validateEmail(otp) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email regex
+            return re.test(String(otp).toLowerCase());
+        }
 
-        checkInputs(); // Call on document ready to set initial state
+        function toggleVerifyOtpButton() {
+            const otpInput = document.getElementById('otp');
 
-        // Prevent form submission if OTP is invalid and show Toastr
-        $('form').on('submit', function(event) {
-            const otpValue = otpInput.val().trim();
-            if (!otpValue) {
-                event.preventDefault(); // Prevent form submission
-                toastr.error('Please fill in the OTP.'); // Show Toastr error
-            } else if (!/^\d{6}$/.test(otpValue)) {
-                event.preventDefault();
-                toastr.error('Please enter a valid 6-digit OTP.');
-            }
-        });
-    });
-</script>
+            // Enable button if OTP is exactly 6 digits
+            verifyOtpButton.disabled = !(otpInput.value.length === 6 && /^\d+$/.test(otpInput.value));
+        }
+    </script>
 
-
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </body>
 
 </html>
