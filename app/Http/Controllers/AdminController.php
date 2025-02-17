@@ -130,6 +130,10 @@ toastr()->success('Your data has been successfully added.');
     public function shipping_function($id){
         $data = DB::table('popular_products')->where('id', $id)->first();
 
-        return view('shipping',compact('data'));
+        $email_session = session('email_session');
+        $customer = Customer::where('email', $email_session)->first();
+
+
+        return view('shipping',compact('data','customer'));
     }
 }

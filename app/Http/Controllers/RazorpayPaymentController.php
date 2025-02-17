@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Razorpay\Api\Api;
 use Session;
 use Exception;
+use App\Models\DeliverAddress;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
@@ -74,5 +75,31 @@ class RazorpayPaymentController extends Controller
             Session::put('error', 'Razorpay payment failed: ' . $e->getMessage());
             return redirect()->back();
         }
+}
+
+public function address_form_function(){
+    return view('address_form');
+}
+
+public function saveaddress_function(Request $request)
+{
+    // Validate the input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'phone' => 'required|string|max:15',
+        'address' => 'required|string|max:500',
+    ]);
+
+    // Debugging - Check the request data
+    dd($request->all());  // This will dump the request data to ensure it's being submitted
+
+    // Save new address
+    DeliverAddress::create([
+        'name' => $request->name,
+        'phone' => $request->phone,
+        'address' => $request->address,
+    ]);
+
+    return redirect()->route('shipping')->with('success', 'Address saved successfully!');
 }
 }

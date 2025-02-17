@@ -7,6 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Olog Shipping-Information</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <style>
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .modal-footer {
+            justify-content: space-between;
+        }
+    </style>
 </head>
 
 <body>
@@ -379,8 +389,9 @@
                                         <span>Contact:</span>
                                     </div>
                                     <div class="right mar-5">
-                                        <p>mike.hudson@gmail.com</p>
-                                        <p>+1202-555-0558</p>
+
+                                        <p>{{ session('name_session') }}</p>
+                                        <p>+91 {{ $customer->phone }}</p>
                                     </div>
                                 </div>
                                 <div class="shipping-info-button">
@@ -395,8 +406,85 @@
                                         <span>Ship to:</span>
                                     </div>
                                     <div class="right mar-5">
-                                        <p>Flat No. # 5/D, Apartmen No. #2587/S, Street No. #24/A, </p>
-                                        <p>Illinois, Chicago-60626</p>
+                                      <a href="{{route('address_form')}}"><button class="btn btn-primary" onclick="openModal()">Add Address</button></a>
+
+                                        <div class="modal fade" id="addressModal" tabindex="-1" role="dialog"
+                                            aria-labelledby="addressModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Enter Your Address</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span>&times;</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <!-- Address Form -->
+                                                        {{-- <form id="addressForm" action="{{route('address_form_submit')}}" method="post">
+                                                            @csrf
+                                                            <div class="form-group">
+                                                                <label for="name">Full Name</label>
+                                                                <input type="text" class="form-control" name="name" id="name" required oninput="checkForm()">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="phone">Phone Number</label>
+                                                                <input type="text" class="form-control" name="phone" id="phone" required oninput="checkForm()">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="address">Address</label>
+                                                                <textarea class="form-control" name="address" id="address" rows="3" required oninput="checkForm()"></textarea>
+                                                            </div>
+
+                                                        </form> --}}
+
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-success"
+                                                            onclick="saveAddress()" id="saveButton" disabled>Save
+                                                            Address</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                                        <script>
+                                            function openModal() {
+                                                $("#addressModal").modal("show"); // Open the modal
+                                            }
+
+                                            function checkForm() {
+                                                let name = document.getElementById("name").value.trim();
+                                                let phone = document.getElementById("phone").value.trim();
+                                                let address = document.getElementById("address").value.trim();
+
+                                                let saveButton = document.getElementById("saveButton");
+                                                saveButton.disabled = !(name && phone && address); // Enable button if all fields are filled
+                                            }
+
+                                            function saveAddress() {
+                                                let name = document.getElementById("name").value;
+                                                let phone = document.getElementById("phone").value;
+                                                let address = document.getElementById("address").value;
+
+                                                if (name && phone && address) {
+                                                    alert("Address saved successfully!");
+                                                    $("#addressModal").modal("hide"); // Close the modal after saving
+                                                    document.getElementById("addressForm").reset(); // Clear form fields
+                                                    document.getElementById("saveButton").disabled = true; // Disable button again
+                                                }
+                                            }
+                                        </script>
+
                                     </div>
                                 </div>
                                 <div class="shipping-info-button">
@@ -466,20 +554,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                    <div class="row">
-                                        <div
-                                            class="col-12 d-flex align-items-center justify-content-between bottom flex-wrap">
-                                            <a href="billing-information.html">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="feather feather-chevron-left">
-                                                    <polyline points="15 18 9 12 15 6"></polyline>
-                                                </svg>
-                                                Return to Billing information</a>
+                                <div class="row">
+                                    <div
+                                        class="col-12 d-flex align-items-center justify-content-between bottom flex-wrap">
+                                        <a href="billing-information.html">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-chevron-left">
+                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                            </svg>
+                                            Return to Billing information</a>
 
-                                        </div>
                                     </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -524,205 +612,207 @@
                                 <p>Total Price</p>
                             </div>
                             <div class="total-price">
-                                <p>{{$data->price}}</p>
+                                <p>{{ $data->price }}</p>
                             </div>
+                            <!DOCTYPE html>
+                            <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
+                            <head>
+                                <meta charset="utf-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1">
+
+                                <!-- CSRF Token -->
+                                <meta name="csrf-token" content="{{ csrf_token() }}">
+
+                                <title>Laravel - Razorpay Payment Gateway Integration</title>
+
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+                                <link rel="stylesheet"
+                                    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+                                    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+                                    crossorigin="anonymous">
+                            </head>
+
+                            <body>
+                                <div id="app">
+                                    <main class="py-4">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-6 offset-md-3">
+
+                                                    @if (session('error'))
+                                                        <div class="alert alert-danger alert-dismissible fade show"
+                                                            role="alert">
+                                                            <strong>Error!</strong> {{ session('error') }}
+                                                            <button type="button" class="close"
+                                                                data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
+
+                                                    @if (session('success'))
+                                                        <div class="alert alert-success alert-dismissible fade show"
+                                                            role="alert">
+                                                            <strong>Success!</strong> {{ session('success') }}
+                                                            <button type="button" class="close"
+                                                                data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    @endif
+
+
+                                                    <form action="{{ route('razorpay.payment.store') }}"
+                                                        method="POST" id="razorpay-form">
+                                                        @csrf
+                                                        <!-- Hidden input to trigger Razorpay payment -->
+                                                        <input type="hidden" name="amount" value="10000">
+                                                        <!-- Amount in paise (100 INR) -->
+                                                        <input type="hidden" name="currency" value="INR">
+                                                        <!-- Currency code -->
+
+                                                        <!-- Razorpay Checkout Button -->
+                                                        <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="rzp_test_Oy9e95ZeYiEu7D" data-amount="10000"
+                                                            data-name="EndelDigital Solution" data-description="Razorpay Payment"
+                                                            data-image="https://www.google.com/imgres?q=endel%20digital%20solutions&imgurl=https%3A%2F%2Fendel.digital%2Fwp-content%2Fuploads%2F2024%2F11%2FEndel-Digital-Solutions-Pvt.-Ltdw3-3-1024x347.png&imgrefurl=https%3A%2F%2Fendel.digital%2F&docid=0eFHo39XvBdUAM&tbnid=YJuZQLWnv0XyOM&vet=12ahUKEwiN6Yy5rsWLAxUpcfUHHSHqJOEQM3oECBYQAA..i&w=1024&h=347&hcb=2&ved=2ahUKEwiN6Yy5rsWLAxUpcfUHHSHqJOEQM3oECBYQAA"
+                                                            data-prefill.name="{{ old('name_session') }}" data-prefill.email="{{ session('email_session') }}"
+                                                            data-theme.color="#ff7529"></script>
+
+
+                                                        <input type="hidden" name="hidden">
+
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                </div>
                         </div>
-
+                        </main>
                     </div>
-                    <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+                    </script>
+</body>
 
-    <title>Laravel - Razorpay Payment Gateway Integration</title>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-<div id="app">
-    <main class="py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-
-                    @if(session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
-
-                            <form action="{{ route('razorpay.payment.store') }}" method="POST" id="razorpay-form">
-                                @csrf
-                                <!-- Hidden input to trigger Razorpay payment -->
-                                <input type="hidden" name="amount" value="10000"> <!-- Amount in paise (100 INR) -->
-                                <input type="hidden" name="currency" value="INR"> <!-- Currency code -->
-
-                                <!-- Razorpay Checkout Button -->
-                                <script
-                                src="https://checkout.razorpay.com/v1/checkout.js"
-                                data-key="rzp_test_Oy9e95ZeYiEu7D"
-                                data-amount="10000"
-                                data-name="EndelDigital Solution"
-                                data-description="Razorpay Payment"
-                                data-image="https://www.google.com/imgres?q=endel%20digital%20solutions&imgurl=https%3A%2F%2Fendel.digital%2Fwp-content%2Fuploads%2F2024%2F11%2FEndel-Digital-Solutions-Pvt.-Ltdw3-3-1024x347.png&imgrefurl=https%3A%2F%2Fendel.digital%2F&docid=0eFHo39XvBdUAM&tbnid=YJuZQLWnv0XyOM&vet=12ahUKEwiN6Yy5rsWLAxUpcfUHHSHqJOEQM3oECBYQAA..i&w=1024&h=347&hcb=2&ved=2ahUKEwiN6Yy5rsWLAxUpcfUHHSHqJOEQM3oECBYQAA"
-                                data-prefill.name="{{ old('name_session') }}"
-                                data-prefill.email="{{ session('email_session') }}"
-                                data-theme.color="#ff7529"
-
-                            ></script>
-
-
-                                <input type="hidden" name="hidden">
-                               
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </main>
+</html>
 </div>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-</html>
+</div>
 
+
+</div>
+</div>
+</div>
+</section>
+
+<!-- Shipping Area End -->
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row align-items-center newsletter-area">
+            <div class="col-lg-5">
+                <div class="newsletter-area-text">
+                    <h4 class="text-white">Subscribe to get notification.</h4>
+                    <p>
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6 offset-lg-1">
+                <div class="newsletter-area-button">
+                    <form action="#">
+                        <div class="form">
+                            <input type="email" name="email" id="mail"
+                                placeholder="Enter your email address" class="form-control">
+                            <button class="btn bg-secondary border text-capitalize">Subscribe</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Shipping Area End -->
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row align-items-center newsletter-area">
-                <div class="col-lg-5">
-                    <div class="newsletter-area-text">
-                        <h4 class="text-white">Subscribe to get notification.</h4>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-6 offset-lg-1">
-                    <div class="newsletter-area-button">
-                        <form action="#">
-                            <div class="form">
-                                <input type="email" name="email" id="mail"
-                                    placeholder="Enter your email address" class="form-control">
-                                <button class="btn bg-secondary border text-capitalize">Subscribe</button>
-                            </div>
-                        </form>
-                    </div>
+        <div class="row main-footer">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                <div class="main-footer-info">
+                    <img src="dist/images/logo/white.png" alt="Logo" class="img-fluid">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam molestie malesuada
+                        metus, non molestie ligula laoreet vitae. Ut et fringilla risus, vel.
+                    </p>
                 </div>
             </div>
-            <div class="row main-footer">
-                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                    <div class="main-footer-info">
-                        <img src="dist/images/logo/white.png" alt="Logo" class="img-fluid">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam molestie malesuada
-                            metus, non molestie ligula laoreet vitae. Ut et fringilla risus, vel.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-2 offset-lg-2 col-md-4 col-sm-6 col-12">
-                    <div class="main-footer-quicklinks">
-                        <h6>Company</h6>
-                        <ul class="quicklink">
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Help &amp; Support</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms of Service</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6 col-12">
-                    <div class="main-footer-quicklinks">
-                        <h6>Quick links</h6>
-                        <ul class="quicklink">
-                            <li><a href="#">New Realease</a></li>
-                            <li><a href="#">Customize</a></li>
-                            <li><a href="#">Sale &amp; Discount</a></li>
-                            <li><a href="#">Men</a></li>
-                            <li><a href="#">Women</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-6 col-12">
-                    <div class="main-footer-quicklinks">
-                        <h6>Account</h6>
-                        <ul class="quicklink">
-                            <li><a href="#">Your Bag</a></li>
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Order Completed</a></li>
-                            <li><a href="#">Log-out</a></li>
-                        </ul>
-                    </div>
+            <div class="col-lg-2 offset-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="main-footer-quicklinks">
+                    <h6>Company</h6>
+                    <ul class="quicklink">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Help &amp; Support</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="copyright d-flex justify-content-between align-items-center">
-                        <div class="copyright-text order-2 order-lg-1">
-                            <p>&copy; 2020. Design and Developed by <a href="#">Zakir Soft</a></p>
-                        </div>
-                        <div class="copyright-links order-1 order-lg-2">
-                            <a href="#" class="ml-0"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="main-footer-quicklinks">
+                    <h6>Quick links</h6>
+                    <ul class="quicklink">
+                        <li><a href="#">New Realease</a></li>
+                        <li><a href="#">Customize</a></li>
+                        <li><a href="#">Sale &amp; Discount</a></li>
+                        <li><a href="#">Men</a></li>
+                        <li><a href="#">Women</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="main-footer-quicklinks">
+                    <h6>Account</h6>
+                    <ul class="quicklink">
+                        <li><a href="#">Your Bag</a></li>
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Order Completed</a></li>
+                        <li><a href="#">Log-out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="copyright d-flex justify-content-between align-items-center">
+                    <div class="copyright-text order-2 order-lg-1">
+                        <p>&copy; 2020. Design and Developed by <a href="#">Zakir Soft</a></p>
+                    </div>
+                    <div class="copyright-links order-1 order-lg-2">
+                        <a href="#" class="ml-0"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
-    <!-- Footer -->
+    </div>
+</footer>
+<!-- Footer -->
 
 
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('scss/vendors/plugin/js/jquery.nice-select.min.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-    <script>
-        function openNav() {
+<script src="{{ asset('js/jquery.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('scss/vendors/plugin/js/jquery.nice-select.min.js') }}"></script>
+<script src="{{ asset('js/main.js') }}"></script>
+<script>
+    function openNav() {
 
-            document.getElementById("mySidenav").style.width = "350px";
-            $('#overlayy').addClass("active");
-        }
+        document.getElementById("mySidenav").style.width = "350px";
+        $('#overlayy').addClass("active");
+    }
 
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-            $('#overlayy').removeClass("active");
-        }
-    </script>
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        $('#overlayy').removeClass("active");
+    }
+</script>
 </body>
-
-
-
-
-
-
