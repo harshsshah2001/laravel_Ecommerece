@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PurchaseConfirmation;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -78,7 +79,7 @@ class RazorpayPaymentController extends Controller
 }
 
 public function address_form_function(){
-    return view('address_form');
+    return view('shipping');
 }
 
 public function saveaddress_function(Request $request)
@@ -90,9 +91,6 @@ public function saveaddress_function(Request $request)
         'address' => 'required|string|max:500',
     ]);
 
-    // Debugging - Check the request data
-    dd($request->all());  // This will dump the request data to ensure it's being submitted
-
     // Save new address
     DeliverAddress::create([
         'name' => $request->name,
@@ -100,6 +98,24 @@ public function saveaddress_function(Request $request)
         'address' => $request->address,
     ]);
 
-    return redirect()->route('shipping')->with('success', 'Address saved successfully!');
+    // Store address in session
+    session()->put('address_session', $validated['address']);
+
+    // Get the product ID from the session
+    $product_id = session('product_id');
+
+    // Clear the product ID from the session (optional)
+    session()->forget('product_id');
+
+    // Fetch customer info from the database
+    $customer_info = DB::table('deliver_addresses')->get();
+
+    // Store customer info in session
+    session()->put('customer_info', $customer_info);
+
+    // Redirect to the shipping route with the product ID
+    return redirect()->route('shipping', ['id' => $product_id])->with('success', 'Address saved successfully!');
 }
+
+
 }

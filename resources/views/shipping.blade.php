@@ -17,6 +17,13 @@
             justify-content: space-between;
         }
     </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -391,7 +398,7 @@
                                     <div class="right mar-5">
 
                                         <p>{{ session('name_session') }}</p>
-                                        <p>+91 {{ $customer->phone }}</p>
+                                        {{-- <p>+91 {{ $customer->phone }}</p> --}}
                                     </div>
                                 </div>
                                 <div class="shipping-info-button">
@@ -406,49 +413,74 @@
                                         <span>Ship to:</span>
                                     </div>
                                     <div class="right mar-5">
-                                      <a href="{{route('address_form')}}"><button class="btn btn-primary" onclick="openModal()">Add Address</button></a>
+
+                                        @if (!session('address_session'))
+                                            <button type="button" class="btn btn-primary" onclick="openModal()">
+                                                Add Address
+                                            </button>
+                                        @else
+                                            @php
+                                                $customer_info = session('customer_info');
+                                            @endphp
+
+                                            @if ($customer_info && $customer_info->isNotEmpty())
+                                                @php
+                                                    $first_address = $customer_info->first(); // Get the first address
+                                                @endphp
+
+                                                <p>{{ $first_address->address }}</p>
+                                            @else
+                                                <button type="button" class="btn btn-primary" onclick="openModal()">
+                                                    Add Address
+                                                </button>
+                                            @endif
+                                        @endif
+
+
+
 
                                         <div class="modal fade" id="addressModal" tabindex="-1" role="dialog"
                                             aria-labelledby="addressModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Enter Your Address</h5>
+                                                        <h5 class="modal-title" id="addressModalLabel">Add Address
+                                                        </h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
-                                                            <span>&times;</span>
+                                                            <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-
                                                     <div class="modal-body">
-                                                        <!-- Address Form -->
-                                                        {{-- <form id="addressForm" action="{{route('address_form_submit')}}" method="post">
+                                                        <form id="addressForm"
+                                                            action="{{ route('address_form_submit') }}"
+                                                            method="post">
                                                             @csrf
                                                             <div class="form-group">
                                                                 <label for="name">Full Name</label>
-                                                                <input type="text" class="form-control" name="name" id="name" required oninput="checkForm()">
+                                                                <input type="text" class="form-control"
+                                                                    name="name" id="name" required
+                                                                    oninput="checkForm()">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="phone">Phone Number</label>
-                                                                <input type="text" class="form-control" name="phone" id="phone" required oninput="checkForm()">
+                                                                <input type="text" class="form-control"
+                                                                    name="phone" id="phone" required
+                                                                    oninput="checkForm()">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="address">Address</label>
                                                                 <textarea class="form-control" name="address" id="address" rows="3" required oninput="checkForm()"></textarea>
                                                             </div>
-
-                                                        </form> --}}
-
+                                                        </form>
                                                     </div>
-
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-success"
-                                                            onclick="saveAddress()" id="saveButton" disabled>Save
-                                                            Address</button>
+                                                        <button type="submit" form="addressForm"
+                                                            class="btn btn-primary">Submit Address</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -459,8 +491,13 @@
 
                                         <script>
                                             function openModal() {
-                                                $("#addressModal").modal("show"); // Open the modal
+                                                $("#addressModal").modal("show");
+                                                document.body.classList.add('blur'); // Add blur class to body
                                             }
+
+                                            $('#addressModal').on('hidden.bs.modal', function() {
+                                                document.body.classList.remove('blur'); // Remove blur class when modal is closed
+                                            });
 
                                             function checkForm() {
                                                 let name = document.getElementById("name").value.trim();
@@ -480,10 +517,11 @@
                                                     alert("Address saved successfully!");
                                                     $("#addressModal").modal("hide"); // Close the modal after saving
                                                     document.getElementById("addressForm").reset(); // Clear form fields
-                                                    document.getElementById("saveButton").disabled = true; // Disable button again
+                                                    checkForm(); // Check form again to disable button
                                                 }
                                             }
                                         </script>
+
 
                                     </div>
                                 </div>

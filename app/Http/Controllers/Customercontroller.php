@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // Import the Log facade
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\Welcomemail;
@@ -24,7 +24,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\PasswordResetOtp;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-
 
 
 class Customercontroller extends Controller
@@ -55,25 +54,7 @@ class Customercontroller extends Controller
                         $errors[] = 'at least one alphabetic character';
                     }
 
-                    // Check for at least one special character
-                    // if (!preg_match('/[^a-zA-Z0-9]/', $value)) {
-                    //     $errors[] = 'at least one special character';
-                    // }
-
-                    // // Check for only alphabetic characters
-                    // if (preg_match('/^[a-zA-Z]+$/', $value)) {
-                    //     $fail('The password must contain alphabetic characters.');
-                    // }
-
-                    // // Check for only numeric characters
-                    // if (preg_match('/^[0-9]+$/', $value)) {
-                    //     $fail('The password mustb contain only one numeric characters.');
-                    // }
-
-                    // // Check for only special characters
-                    // if (preg_match('/^[^a-zA-Z0-9]+$/', $value)) {
-                    //     $fail('The password must not contain only special characters.');
-                    // }
+                
 
                     // New check to ensure the password contains at least one of each type
                     if (empty($errors) && !(
@@ -275,10 +256,15 @@ public function index_page()
 
 }
 
-public function shipping_funciton($id)
-{
-    $shipping_data = DB::table('popular_products')->where('id', $id)->first();
-    return view('shipping', compact('shipping_data'));
+public function shipping_function(Request $request, $id) {
+    $data = DB::table('popular_products')->where('id', $id)->first();
+    $email_session = session('email_session');
+    $customer = Customer::where('email', $email_session)->first();
+
+    // Store the product ID in the session
+    session(['product_id' => $id]);
+
+    return view('shipping', compact('data', 'customer'));
 }
 
 public function pdf_function(Request $request, $id) {

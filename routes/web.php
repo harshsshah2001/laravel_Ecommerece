@@ -64,7 +64,7 @@ Route::get('index', [Customercontroller::class, 'index_page'])->name('index');
 
 
     //Reser Password
-    Route::get('/forgot-password', [CustomerController::class, 'showForgotPasswordForm'])->name('forgot.password.form');
+Route::get('/forgot-password', [CustomerController::class, 'showForgotPasswordForm'])->name('forgot.password.form');
 Route::post('/forgot-password', [CustomerController::class, 'sendOtp'])->name('otp.send');
 Route::get('/otp-verification', [CustomerController::class, 'showOtpVerificationForm'])->name('otp.verification.form');
 Route::post('/otp-verification', [CustomerController::class, 'verifyOtps'])->name('otp.verifys');

@@ -127,13 +127,14 @@ toastr()->success('Your data has been successfully added.');
     }
 
 
-    public function shipping_function($id){
+    public function shipping_function(Request $request, $id) {
         $data = DB::table('popular_products')->where('id', $id)->first();
-
         $email_session = session('email_session');
         $customer = Customer::where('email', $email_session)->first();
 
+        // Store the product ID in the session
+        session(['product_id' => $id]);
 
-        return view('shipping',compact('data','customer'));
+        return view('shipping', compact('data', 'customer'));
     }
 }
